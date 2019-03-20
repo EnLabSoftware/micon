@@ -1,0 +1,34 @@
+<div class="col-xs-12 col-sm-7 col-md-8 m-b-2">
+    <div class="card border-radius-0">
+        <div class="card-block">
+            <div id="comp-data">
+                <div class="data">
+                    <h5 class="card-title">Data Files</h5>
+                    <p class="m-t-1" *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i> The Data files is loading...</p>
+                    <div *ngIf="!isLoading">
+                        <div id="dataTable">
+                            <p-dataTable [value]="competitionDataList" [responsive]="true">
+                                <p-column field="name" header="File Name"></p-column>
+                                <p-column field="type_name" header="Type"></p-column>
+                                <p-column field="url" header="Available Formats">
+                                    <template let-data="rowData" pTemplate type="body">
+                                        <a href="{{ data.url }}" class="text-primary">
+                                            <strong>{{ data.format }} ({{ data.size }})</strong>
+                                        </a>
+                                    </template>
+                                </p-column>
+                            </p-dataTable>
+                        </div>
+                        <h5 class="m-t-2">File descriptions</h5>
+                        <ul>
+                            <template ngFor let-data [ngForOf]="competitionDataList">
+                                <li *ngIf="data.description"><strong>{{ data.name }}</strong> - {{ data.description }}</li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

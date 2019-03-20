@@ -1,0 +1,41 @@
+<div class="cpl-header card-block">
+    <h1 class="header-title vertical-center display-4 m-a-0">Competition Gallery</h1>
+</div>
+
+<div class="container">
+    <div id="comp-gallery" class="m-t-3">
+        <div class="card-block text-xs-center" [hidden]="isLoading">
+            <p class="card-text text-muted"><i class="fa fa-spinner fa-spin"></i> Loading competitions...</p>
+        </div>
+        <div class="card-block text-xs-center" [hidden]="competitions?.length || !isLoading">
+            <p class="card-text text-muted">No competitions to show</p>
+        </div>
+        <div class="c-item" *ngFor="let competition of competitions">
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <div class="card border-radius-0">
+                    <div class="card-block">
+                        <div class="teams text-muted pull-right">
+                            <span class="fa fa-user"></span>
+                            {{ competition.players }}
+                        </div>
+                        <h5 class="item-title card-title">
+                            <a [routerLink]="['/c', competition.slug]">{{ competition.title }}</a>
+                        </h5>
+                    </div>
+                    <div class="item-image text-xs-center">
+                        <a [routerLink]="['/c', competition.slug]">
+                            <img src="{{ competition.logo }}" class="item-thumb">
+                        </a>
+                    </div>
+                    <div class="card-block">
+                        <div class="item-description card-subtitle m-b-1">{{ competition.short_description }}</div>
+                        <div class="item-endtime text-muted">
+                            <span class="fa fa-flag-checkered"></span>
+                            {{ competition.end_time | date:'longDate' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

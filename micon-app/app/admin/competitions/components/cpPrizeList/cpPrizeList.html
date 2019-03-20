@@ -1,0 +1,129 @@
+<p-dataTable [value]="dataList" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true" [stacked]="stacked" expandableRows="true">
+    <p-column expander="true" styleClass="col-icon"></p-column>
+    <p-column field="money" header="Money">
+        <template let-data="rowData" pTemplate type="body">
+            <span>{{ data.money | currency:'USD':true:'1.0-0' }}</span>
+        </template>
+    </p-column>
+    <p-column field="place" header="Place">
+        <template let-data="rowData" pTemplate type="body">
+            <span>{{ data.name }}</span>
+        </template>
+    </p-column>
+    <footer>
+        <div class="ui-helper-clearfix" style="width:100%">
+            <button type="button" pButton icon="fa-plus" style="float:left" (click)="onCreate()" label="Add"></button>
+        </div>
+    </footer>
+    <template let-data>
+        <div class="ui-grid ui-grid-responsive">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 text-muted"><strong>Description: </strong></div>
+                            <div class="ui-grid-col-10">{{ data.description }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid">
+            <button type="button" class="btn btn-link btn-sm text-primary" (click)="onEdit(data)">
+                <i class="fa fa-edit"></i> Edit
+            </button>
+            <button type="button" class="btn btn-link btn-sm text-danger" (click)="onDelete(data)">
+                <i class="fa fa-trash"></i> Delete
+            </button>
+        </div>
+    </template>
+</p-dataTable>
+
+<p-dialog
+        [appendTo]="formSettings.appendTo"
+        [(header)]="formSettings.header"
+        [(modal)]="formSettings.modal"
+        [(visible)]="formSettings.visible"
+        [(draggable)]="formSettings.draggable"
+        [(resizable)]="formSettings.resizable"
+        [(responsive)]="formSettings.responsive"
+        [(width)]="formSettings.width" *ngIf="formSettings.visible">
+
+    <form *ngIf="is_create" class="form-horizontal" novalidate #f="ngForm" (ngSubmit)="formCreate(f.valid)">
+        <div class="row">
+            <label for="inputMoney" class="form-control-label">Money</label>
+            <div class="col-sm-12">
+                <input type="number" min="0" required [(ngModel)]="prize.money" #money="ngModel" name="money"
+                       class="form-control" pattern="[0-9]+" maxlength="10">
+                <div *ngIf="money.errors && money.touched" class="text-danger">
+                    <small [hidden]="!money.errors.required">Money is required</small>
+                    <small [hidden]="!money.errors.pattern">Money must be a positive number</small>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <label for="inputPlace" class="form-control-label">Place</label>
+            <div class="col-sm-12">
+                <select class="form-control" required [(ngModel)]="prize.place" #place="ngModel" name="place">
+                    <option *ngFor="let p of placeList" [ngValue]="p.value" [selected]="p.value == prize.place">{{p.name}}</option>
+                </select>
+                <small [hidden]="place.valid || (place.pristine && !f.submitted)" class="text-danger">
+                    Place is required
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <label for="inputDescription" class="form-control-label">Description</label>
+            <div class="col-sm-12">
+                <textarea rows="3" style="width: 100%" [(ngModel)]="prize.description" name="description" class="form-control"></textarea>
+            </div>
+        </div>
+        <footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                <button type="button" pButton icon="fa-close" (click)="hideDialog()" label="Cancel"></button>
+                <button type="submit" pButton icon="fa-check" label="Add"></button>
+            </div>
+        </footer>
+    </form>
+
+    <form *ngIf="is_edit" class="form-horizontal" novalidate #fe="ngForm" (ngSubmit)="formEdit(fe.valid)">
+        <div class="row">
+            <label for="inputID" class="form-control-label">ID: <strong>{{ editRow.id }}</strong></label>
+        </div>
+        <div class="row">
+            <label class="form-control-label">Money</label>
+            <div class="col-sm-12">
+                <input type="number" min="0" required [(ngModel)]="editRow.money" #moneye="ngModel" name="moneye"
+                       class="form-control" pattern="[0-9]+" maxlength="10">
+                <div *ngIf="moneye.errors && moneye.touched" class="text-danger">
+                    <small [hidden]="!moneye.errors.required">Money is required</small>
+                    <small [hidden]="!moneye.errors.pattern">Money must be a positive number</small>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <label for="inputPlace" class="form-control-label">Place</label>
+            <div class="col-sm-12">
+                <select class="form-control" required [(ngModel)]="editRow.place" #place="ngModel" name="place">
+                    <option *ngFor="let p of placeList" [ngValue]="p.value" [selected]="p.value == editRow.place">{{p.name}}</option>
+                </select>
+                <small [hidden]="place.valid || (place.pristine && !fe.submitted)" class="text-danger">
+                    Place is required
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <label for="inputDescription" class="form-control-label">Description</label>
+            <div class="col-sm-12">
+                <textarea rows="3" style="width: 100%" [(ngModel)]="editRow.description" name="description" class="form-control"></textarea>
+            </div>
+        </div>
+        <footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                <button type="button" pButton icon="fa-close" (click)="hideDialog()" label="Cancel"></button>
+                <button type="submit" pButton icon="fa-check" label="Edit"></button>
+            </div>
+        </footer>
+    </form>
+</p-dialog>
+

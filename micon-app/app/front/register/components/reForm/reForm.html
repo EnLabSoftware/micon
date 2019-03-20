@@ -1,0 +1,91 @@
+<fr-login-top></fr-login-top>
+<div class="col-sm-8 col-sm-offset-2">
+    <div class="card m-x-auto m-t-3" style="max-width: 450px">
+        <div class="card-block">
+            <h1 class="text-xs-center">Sign up to MICON</h1>
+            <hr>
+            <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="form-horizontal">
+                <div class="form-group"
+                     [ngClass]="{'has-error': (!username.valid && username.touched), 'has-success': (username.valid && !isExistUsername && username.touched)}">
+                    <label for="inputUserName3" class="control-label">Username:</label>
+
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                        <input [formControl]="username" maxlength="32" type="text" class="form-control"
+                               id="inputUserName3" name="username" pattern="[a-z0-9]+"
+                               placeholder="User Name" (keyup)="onChangeUsername($event)"
+                               (change)="onChangeUsername($event)">
+                    </div>
+                        <span [hidden]="!isExistUsername" class="text-danger">
+                            {{ username_message }}
+                        </span>
+
+                    <div *ngIf="!username.valid && username.touched" class="text-danger">
+                        <span *ngIf="username.errors.required">Username is required</span>
+                        <span *ngIf="username.errors.minlength">Username needs to be at least 6 characters</span>
+                        <span *ngIf="username.errors.pattern">Username should contain only: a-z 0-9</span>
+                    </div>
+                </div>
+                <div class="form-group"
+                     [ngClass]="{'has-error': (!email.valid && email.touched), 'has-success': (email.valid && !isExistEmail && email.touched)}">
+                    <label for="inputEmail3" class="control-label">Email:</label>
+
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                        <input [formControl]="email" type="email" class="form-control" id="inputEmail3"
+                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                               placeholder="Email" name="email" (keyup)="onChangeEmail($event)"
+                               (change)="onChangeEmail($event)">
+                    </div>
+                        <span [hidden]="!isExistEmail" class="text-danger">
+                            {{ email_message }}
+                        </span>
+
+                    <div *ngIf="!email.valid && email.touched" class="text-danger">
+                        <span *ngIf="email.errors.required">Email is required</span>
+                        <span *ngIf="email.errors.pattern">Email is unformatted</span>
+                    </div>
+                </div>
+                <div class="form-group"
+                     [ngClass]="{'has-error': (!password.valid && password.touched), 'has-success': (password.valid && password.touched)}">
+                    <label for="inputPassword3" class="control-label">Password:</label>
+
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                        <input [formControl]="password" type="password" class="form-control" id="inputPassword3"
+                               placeholder="Password" pattern="[a-zA-Z0-9]+" (keyup)="onChangePassword($event)"
+                               (change)="onChangePassword($event)">
+                    </div>
+                    <div *ngIf="!password.valid && password.touched" class="text-danger">
+                        <span *ngIf="password.errors.pattern">Password should contain only: a-z A-Z 0-9</span>
+                        <span *ngIf="password.errors.minlength">Username needs to be at least 8 characters</span>
+                    </div>
+                </div>
+                <div class="form-group"
+                     [ngClass]="{'has-error': (!repeatPassword.valid && repeatPassword.touched), 'has-success': (repeatPassword.valid && repeatPassword.touched)}">
+                    <label for="inputPassword4" class="control-label">Repeat:</label>
+
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                        <input [formControl]="repeatPassword" type="password" class="form-control"
+                               id="inputPassword4"
+                               placeholder="Repeat">
+                    </div>
+                    <div *ngIf="!passwords.valid && (password.touched || repeatPassword.touched)"
+                         class="text-danger">
+                        <span class="text-danger">Passwords don't match</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p>Already have a MICON account? <a [routerLink]="['/login']" class="">Sign in!</a></p>
+                    <button [disabled]="!form.valid || isExistUsername || isExistEmail" type="submit"
+                            class="btn btn-primary btn-block border-radius-0">Sign up
+                    </button>
+                </div>
+            </form>
+            <hr>
+            <div class="auth-sep"><span>or Sign up with one click</span></div>
+            <auth-social></auth-social>
+        </div>
+    </div>
+</div>

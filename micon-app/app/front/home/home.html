@@ -1,0 +1,66 @@
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol *ngIf="slides_list" class="carousel-indicators">
+        <template ngFor let-slide [ngForOf]="slides_list" let-myIndex="index">
+            <li *ngIf="myIndex==0" class="active" data-target="#carousel-example-generic"></li>
+            <li *ngIf="myIndex!=0" data-target="#carousel-example-generic"></li>
+        </template>
+    </ol>
+    <ol *ngIf="!slides_list" class="carousel-indicators">
+        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+    </ol>
+    <!-- Wrapper for slides -->
+    <div *ngIf="slides_list" class="carousel-inner" role="listbox">
+        <template ngFor let-slide [ngForOf]="slides_list" let-myIndex="index">
+            <div *ngIf="myIndex==0" class="carousel-item active">
+                <img [lazyLoad]="slide.image">
+                <div class="carousel-caption">
+                    <h3>{{ slide.caption }}</h3>
+                </div>
+            </div>
+            <div *ngIf="myIndex!=0" class="carousel-item">
+                <img [lazyLoad]="slide.image">
+                <div class="carousel-caption">
+                    <h2>{{ slide.caption }}</h2>
+                    <p></p>
+                </div>
+            </div>
+        </template>
+    </div>
+    <!-- Controls -->
+    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+        <span class="icon-prev" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+        <span class="icon-next" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
+<section id="portfolio">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-xs-center">
+                <h3>Competitions</h3>
+                <hr class="star-primary">
+            </div>
+        </div>
+        <div class="row m-t-2">
+            <div *ngFor="let competition of incoming_competitions" class="col-xl-4 col-lg-4 col-md-6 col-sm-12 portfolio-item">
+                <a [routerLink]="['/c', competition.slug]" class="portfolio-link" data-toggle="modal">
+                    <div class="caption">
+                        <div class="caption-content">
+                            <strong>{{ competition.title }}</strong>
+                            <span style="font-size: 16px;">{{ competition.short_description }}</span>
+                            <span style="font-size: 14px;margin-top: 5px"><i>Start: </i><strong>{{ competition.start_time | date:'longDate' }}</strong></span>
+                        </div>
+                    </div>
+                    <img [lazyLoad]="competition.logo" class="img-responsive">
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

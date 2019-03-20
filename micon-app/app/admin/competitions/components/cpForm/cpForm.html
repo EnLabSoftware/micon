@@ -1,0 +1,140 @@
+<div class="widgets">
+    <div class="row">
+        <div class="col-md-12">
+            <ba-card title="Competition Info" baCardClass="with-scroll">
+                <form class="form-horizontal" novalidate #f="ngForm" (ngSubmit)="formSubmit(f.valid && competition.description && competition.logo && competition.image)">
+                    <div class="form-group row" [class.has-error]="!title.valid && f.submitted">
+                        <label for="inputTitle" class="col-sm-2 form-control-label">Title</label>
+                        <div class="col-sm-6">
+                            <input type="text" required minlength="5" [(ngModel)]="competition.title" #title="ngModel" name="title"
+                                   class="form-control" id="inputTitle" placeholder="Title">
+                            <small [hidden]="title.valid || (title.pristine && !f.submitted)" class="text-danger">
+                                Title is required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group row" [class.has-error]="!competition.description && f.submitted">
+                        <label for="inputDescription" class="col-sm-2 form-control-label">Description</label>
+                        <div class="col-sm-10">
+                            <ckeditor required #description="ngModel"
+                                      [config]="ckeditorConfig"
+                                      [(ngModel)]="competition.description"
+                                      [ngModelOptions]="{standalone: true}" ></ckeditor>
+                            <small [hidden]="competition.description || (!competition.description && !f.submitted)" class="text-danger">
+                                Description is required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group row" [class.has-error]="!s_description.valid && f.submitted">
+                        <label for="inputShortDescription" class="col-sm-2 form-control-label">Short
+                            Description</label>
+                        <div class="col-sm-10">
+                            <textarea required #s_description="ngModel" [(ngModel)]="competition.short_description" name="short_description" rows="5"
+                                      class="form-control"></textarea>
+                            <small [hidden]="s_description.valid || (s_description.pristine && !f.submitted)" class="text-danger">
+                                Short description is required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group row" [class.has-error]="!competition.logo && f.submitted">
+                        <label for="inputLogo" class="col-sm-2 form-control-label">Logo</label>
+                        <div class="col-sm-6">
+                            <ba-image-input required #logo="ngModel"
+                                            [picture]="competition.logo" [defaultPicture]="defaultLogo"
+                                            [(ngModel)]="competition.logo"
+                                            [ngModelOptions]="{standalone: true}"></ba-image-input>
+                            <small [hidden]="competition.logo || (!competition.logo && !f.submitted)" class="text-danger">
+                                Logo is required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group row" [class.has-error]="!competition.image && f.submitted">
+                        <label for="inputImage" class="col-sm-2 form-control-label">Image</label>
+                        <div class="col-sm-6">
+                            <ba-image-input required #image="ngModel"
+                                            [picture]="competition.image" [defaultPicture]="defaultImage"
+                                            [(ngModel)]="competition.image"
+                                            [ngModelOptions]="{standalone: true}"></ba-image-input>
+                            <small [hidden]="competition.image || (!competition.image && !f.submitted)" class="text-danger">
+                                Image is required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group row" [class.has-error]="!start_time.valid && f.submitted">
+                        <label for="inputStartTime" class="col-sm-2 form-control-label">Start Time</label>
+                        <div class="col-sm-6">
+                            <p-calendar [showTime]="true" [(ngModel)]="start" [ngModelOptions]="{standalone: true}"
+                                        #start_time="ngModel" [minDate]="minStartDate" readonlyInput="true"></p-calendar>
+                            <small [hidden]="start_time.valid || (start_time.pristine && !f.submitted)" class="text-danger">
+                                Start time is required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group row" [class.has-error]="!end_time.valid && f.submitted">
+                        <label for="inputEndTime" class="col-sm-2 form-control-label">End Time</label>
+                        <div class="col-sm-6">
+                            <div>
+                                <p-calendar [showTime]="true" [(ngModel)]="end" [ngModelOptions]="{standalone: true}" #end_time="ngModel"
+                                readonlyInput="true"></p-calendar><span *ngIf="error" class="fa fa-warning" style="color:red"></span>
+                            </div>
+                            <small [hidden]="end_time.valid || (end_time.pristine && !f.submitted)" class="text-danger">
+                                End time is required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group row" [class.has-error]="!status.valid && f.submitted">
+                        <label for="inputStatus" class="col-sm-2 form-control-label">Status</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" required [(ngModel)]="competition.status" #status="ngModel" name="status">
+                                <option *ngFor="let s of statusList" [ngValue]="s.value" [selected]="s.value == competition.status">{{s.name}}</option>
+                            </select>
+                            <small [hidden]="status.valid || (status.pristine && !f.submitted)" class="text-danger">
+                                Status is required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputType" class="col-sm-2 form-control-label">Type</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" [(ngModel)]="competition.type" name="type">
+                                <option *ngFor="let t of typesList" [ngValue]="t.value" [selected]="t.value == competition.type">{{t.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary border-radius-0" *ngIf="!competition.id">Create</button>
+                            <button type="submit" class="btn btn-primary border-radius-0" *ngIf="competition.id">Update</button>
+                        </div>
+                    </div>
+                </form>
+            </ba-card>
+        </div>
+    </div>
+</div>
+
+<div class="widgets" *ngIf="competition.id">
+    <div class="row">
+        <div class="col-md-12">
+            <ba-card title="Competition Data" baCardClass="with-scroll">
+                <cp-data-list [competition]="competition"></cp-data-list>
+            </ba-card>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <ba-card title="Prizes" baCardClass="with-scroll">
+                <cp-prize-list [competition]="competition"></cp-prize-list>
+            </ba-card>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <ba-card title="Evaluation Code" baCardClass="with-scroll">
+                <cp-evaluation-list [competition]="competition"></cp-evaluation-list>
+            </ba-card>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="widgets">
+    <div class="row">
+        <p-dataTable [value]="dataList" [rows]="20" [paginator]="true" [pageLinks]="3" [responsive]="true" [stacked]="stacked" expandableRows="true">
+            <p-column expander="true" styleClass="col-icon"></p-column>
+            <p-column field="username" header="Username" [filter]="true" filterMatchMode="contains" [style]="{'width':'20%'}"></p-column>
+            <p-column field="email" header="Email" [filter]="true" filterMatchMode="contains"></p-column>
+            <p-column field="is_active" header="Is active" [style]="{'width':'10%'}"></p-column>
+            <p-column field="is_verified" header="Is verified" [style]="{'width':'10%'}"></p-column>
+            <p-column field="last_login" header="Last login" [sortable]="true" [style]="{'width':'15%'}">
+                <template let-col let-data="rowData" pTemplate="body">
+                    <span>{{data.last_login | date: 'MM/dd/yyyy HH:mm'}}</span>
+                </template>
+            </p-column>
+            <p-column field="is_social" header="Social" [style]="{'width':'10%'}"></p-column>
+            <template let-data>
+                <div class="ui-grid">
+                    <button *ngIf="data.is_active" type="button" class="btn btn-link btn-sm text-primary" (click)="onInactive(data)">
+                        <i class="fa fa-lock"></i> Inactive
+                    </button>
+                    <button *ngIf="!data.is_active" type="button" class="btn btn-link btn-sm text-primary" (click)="onInactive(data)">
+                        <i class="fa fa-lock"></i> Active
+                    </button>
+                    <button type="button" class="btn btn-link btn-sm text-danger" (click)="onDelete(data)">
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+                </div>
+            </template>
+        </p-dataTable>
+    </div>
+</div>

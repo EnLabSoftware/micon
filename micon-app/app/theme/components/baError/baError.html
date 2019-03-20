@@ -1,0 +1,41 @@
+<div class="error-wrap">
+    <div class="error" *ngIf="status == '401' || status == '403'">
+        <div class="text-xs-center exception-type e-401">
+            <img src="/static/app/assets/img/401.svg" class="img-fluid m-x-auto">
+        </div>
+        <div class="card exception-panel p-a-2">
+            <div class="card-block">
+                <i class="fa fa-shield e-401"></i>
+                <h1>Access Denied</h1>
+                <div class="exception-detail m-b-3">You are not authorized to access this resource.</div>
+                <a [routerLink]="['/']" class="btn btn-primary-outline border-radius-0">Home</a>
+            </div>
+        </div>
+    </div>
+    <div class="error" *ngIf="status == '404'">
+        <div class="text-xs-center exception-type e-404">
+            <img src="/static/app/assets/img/404.svg" class="img-fluid m-x-auto">
+        </div>
+        <div class="card exception-panel p-a-2">
+            <div class="card-block">
+                <i class="fa fa-exclamation-circle e-404"></i>
+                <h1>Not Found</h1>
+                <div class="exception-detail m-b-3">The resource you are looking for does not exist.</div>
+                <a [routerLink]="['/']" class="btn btn-primary-outline border-radius-0">Home</a>
+            </div>
+        </div>
+    </div>
+    <div class="error" *ngIf="status != '401' && status != '403' && status != '404'">
+        <div class="text-xs-center exception-type e-error">
+            <img src="/static/app/assets/img/error.svg" class="img-fluid m-x-auto">
+        </div>
+        <div class="card exception-panel p-a-2">
+            <div class="card-block">
+                <i class="fa fa-exclamation-circle e-error"></i>
+                <h1>Exception Occured</h1>
+                <div class="exception-detail m-b-3">Please contact system administrator.</div>
+                <a [routerLink]="['/']" class="btn btn-primary-outline border-radius-0">Home</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,93 @@
+front {
+  font-family: Roboto, 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+  top: 0;
+}
+
+#submission-input input[type="file"] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -moz-opacity: 0;
+  opacity: 0;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+  filter: alpha(opacity=0) !important;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+#leaderboard-table {
+  .user-current-rank {
+    background: rgba(32,190,255,0.3);
+    font-weight: bold;
+    border-bottom: 0;
+  }
+  .your_entry_score {
+    background: #29A6D5;
+    color: white;
+    td {
+      padding: 15px;
+    }
+  }
+}
+
+.cp-prime-table {
+  thead th {
+    color: #888;
+    font-size: 14px;
+  }
+  thead th, tbody td {
+    border-style: none;
+    padding: 7px;
+  }
+  tbody > tr.ui-widget-content,
+  .ui-widget-content {
+    border: 1px solid #f3f3f3;
+    border-left: 0;
+    border-right: 0;
+    a {
+      text-decoration: none;
+    }
+  }
+  .ui-paginator.ui-paginator-bottom {
+    background: none;
+    border: none;
+    padding: 10px 0;
+    .ui-paginator-element {
+      border: none;
+      &.ui-paginator-first span:before {
+        content: '\f100';
+      }
+      &.ui-paginator-prev span:before {
+        content: '\f104';
+      }
+      &.ui-paginator-next span:before {
+        content: '\f105';
+      }
+      &.ui-paginator-last span:before {
+        content: '\f101';
+      }
+    }
+    .ui-paginator-page.ui-state-active {
+      background: none;
+      color: black;
+      font-weight: bold;
+    }
+  }
+}
+
+#comp-topics-list .cp-prime-table {
+  thead {
+    tr th {
+      text-align: left;
+      font-weight: normal;
+      .ui-column-filter {
+        display: none;
+      }
+    }
+  }
+  .topic-info {
+    font-size: 15px;
+  }
+}

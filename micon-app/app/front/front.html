@@ -1,0 +1,9 @@
+<div class="fr-base m-b-2">
+    <fr-base-top></fr-base-top>
+    <div class="fr-content">
+        <p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+        <p-growl [value]="msgs" [life]="5000"></p-growl>
+        <router-outlet></router-outlet>
+    </div>
+</div>
+<ba-back-top position="200"></ba-back-top>

@@ -1,0 +1,164 @@
+<p-dataTable [value]="dataList" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true" [stacked]="stacked" expandableRows="true">
+    <p-column expander="true" styleClass="col-icon"></p-column>
+    <p-column field="id" header="ID" [sortable]="true" [filter]="true"></p-column>
+    <p-column field="name" header="Name" [sortable]="true" [filter]="true"></p-column>
+    <p-column field="uploaded" header="Uploaded" [sortable]="true" [filter]="true">
+        <template let-data="rowData" pTemplate type="body">
+            {{ data.uploaded | date:'medium' }}
+        </template>
+    </p-column>
+    <p-column field="active" header="Active" [sortable]="true" styleClass="text-capitalize">
+        <template let-data="rowData" pTemplate type="body">
+            {{ data.active }} <span *ngIf="data.message_log" style="color: red">(An error has occur)</span>
+        </template>
+    </p-column>
+    <footer>
+        <div class="ui-helper-clearfix" style="width:100%">
+            <button type="button" pButton icon="fa-plus" style="float:left" (click)="onCreate()" label="Add"></button>
+        </div>
+    </footer>
+    <template let-data>
+        <div class="ui-grid ui-grid-responsive">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 text-muted"><strong>Evaluation Function: </strong></div>
+                            <div class="ui-grid-col-10">{{ data.evaluation_func }}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 text-muted"><strong>Validation Function: </strong></div>
+                            <div class="ui-grid-col-10">{{ data.validation_func }}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 text-muted"><strong>Description: </strong></div>
+                            <div class="ui-grid-col-10">{{ data.description }}</div>
+                        </div>
+                        <div *ngIf="data.message_log" class="ui-grid-row">
+                            <div class="ui-grid-col-2 text-muted"><strong>Error: </strong></div>
+                            <div class="ui-grid-col-10">{{ data.message_log }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid">
+            <button type="button" class="btn btn-link btn-sm text-primary" (click)="onEdit(data)">
+                <i class="fa fa-edit"></i> Edit
+            </button>
+            <a href="{{ data.file }}" class="btn btn-link text-primary"><i class="fa fa-download"></i> Download</a>
+            <button type="button" class="btn btn-link btn-sm text-danger" (click)="onDelete(data)">
+                <i class="fa fa-trash"></i> Delete
+            </button>
+        </div>
+    </template>
+</p-dataTable>
+
+<p-dialog
+        [appendTo]="formSettings.appendTo"
+        [(header)]="formSettings.header"
+        [(modal)]="formSettings.modal"
+        [(visible)]="formSettings.visible"
+        [(draggable)]="formSettings.draggable"
+        [(resizable)]="formSettings.resizable"
+        [(responsive)]="formSettings.responsive"
+        [(width)]="formSettings.width" *ngIf="formSettings.visible">
+
+    <form *ngIf="is_create" class="form-horizontal" novalidate #f="ngForm" (ngSubmit)="formCreate(f.valid && evaluation.file)">
+        <div class="row" [class.has-error]="!evaluation.file && f.submitted">
+            <label for="inputFile" class="form-control-label">File</label>
+            <div class="col-sm-12">
+                <ba-file-input #file="ngModel" required [(ngModel)]="evaluation.file" [accept]="'.py, '" [ngModelOptions]="{standalone: true}"></ba-file-input>
+                <small [hidden]="evaluation.file || (!evaluation.file && !f.submitted)" class="text-danger">
+                    File is required
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <label for="inputEvaluationFunc" class="form-control-label">Evaluation Function Name</label>
+            <div class="col-sm-12">
+                <input type="text" required [(ngModel)]="evaluation.evaluation_func" #evaluation_func="ngModel" name="evaluation_func"
+                       class="form-control">
+                <small [hidden]="evaluation_func.valid || (evaluation_func.pristine && !f.submitted)" class="text-danger">
+                    Evaluation function name is required
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <label for="inputValidationFunc" class="form-control-label">Validation Function Name</label>
+            <div class="col-sm-12">
+                <input type="text" required [(ngModel)]="evaluation.validation_func" #validation_func="ngModel" name="validation_func"
+                       class="form-control">
+                <small [hidden]="validation_func.valid || (validation_func.pristine && !f.submitted)" class="text-danger">
+                    Validation function name is required
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <label for="inputDescription" class="form-control-label">Description</label>
+            <div class="col-sm-12">
+                <textarea rows="3" style="width: 100%" [(ngModel)]="evaluation.description" name="description" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label><input type="checkbox" [(ngModel)]="evaluation.active" name="active"> Active</label>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                <button type="button" pButton icon="fa-close" (click)="hideDialog()" label="Cancel"></button>
+                <button type="submit" pButton icon="fa-check" label="Add"></button>
+            </div>
+        </footer>
+    </form>
+
+    <form *ngIf="is_edit" class="form-horizontal" novalidate #f="ngForm" (ngSubmit)="formEdit(f.valid)">
+        <div class="row">
+            <label for="inputID" class="form-control-label">ID: <strong>{{ editRow.id }}</strong></label>
+        </div>
+        <div class="row">
+            <label for="inputEvaluationFunc" class="form-control-label">Evaluation Function Name</label>
+            <div class="col-sm-12">
+                <input type="text" required [(ngModel)]="editRow.evaluation_func" #evaluation_func="ngModel" name="evaluation_func"
+                       class="form-control">
+                <small [hidden]="evaluation_func.valid || (evaluation_func.pristine && !f.submitted)" class="text-danger">
+                    Evaluation function name is required
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <label for="inputValidationFunc" class="form-control-label">Validation Function Name</label>
+            <div class="col-sm-12">
+                <input type="text" required [(ngModel)]="editRow.validation_func" #validation_func="ngModel" name="validation_func"
+                       class="form-control">
+                <small [hidden]="validation_func.valid || (validation_func.pristine && !f.submitted)" class="text-danger">
+                    Validation function name is required
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <label for="inputDescription" class="form-control-label">Description: </label>
+            <div class="col-sm-12">
+                <textarea rows="6" [(ngModel)]="editRow.description"
+                          name="description" class="form-control" style="width: 100%"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label><input type="checkbox" [(ngModel)]="editRow.active" name="active"> Active</label>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                <button type="button" pButton icon="fa-close" (click)="hideDialog()" label="Cancel"></button>
+                <button type="submit" pButton icon="fa-check" label="Edit"></button>
+            </div>
+        </footer>
+    </form>
+</p-dialog>
+

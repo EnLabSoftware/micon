@@ -1,0 +1,77 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat:700);
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+.btn {
+  &:focus,
+  &:focus:active,
+  .active.focus{
+    outline: none;
+  }
+}
+
+.btn-link:focus,
+.btn-link:hover {
+  text-decoration: none;
+  outline: 0;
+}
+
+.border-radius-0 {
+  border-radius: 0!important;
+}
+
+.col-icon {
+  width: 50px;
+  text-align: center;
+}
+.col-width-0 {
+  width: 0px;
+}
+
+.col-width-100 {
+  width: 100px;
+}
+
+.col-width-120 {
+  width: 120px;
+}
+
+.vertical {
+  min-height: 100%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -ms-flex-pack: center;
+}
+
+.vertical-center {
+  min-height: 100%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}

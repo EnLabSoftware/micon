@@ -1,0 +1,54 @@
+a{
+  color: #818a91;
+  cursor: pointer;
+  text-decoration: none;
+  &:hover{
+    font-weight: 700;
+  }
+}
+
+.sort{
+  padding: 0.5rem 1.25rem !important;
+}
+
+.action{
+  padding: 0.5rem 1.25rem !important;
+  ul{
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    li{
+      &:hover{
+        cursor: pointer;
+      }
+      &.selected{
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.c-item {
+  &:hover {
+    background-color: #FBFBFB;
+  }
+  .item-image img {
+    width: 100%;
+    max-width: 200px;
+    max-height: 200px;
+  }
+  .item-info {
+    .title a {
+      text-decoration: none;
+      font-size: 25px;
+      color: #47494D;
+      &:hover {
+        color: #209e91;
+      }
+    }
+  }
+}
+
+.profile-competition{
+  margin-bottom: 0.7rem !important;
+}

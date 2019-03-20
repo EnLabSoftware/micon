@@ -1,0 +1,48 @@
+<div class="profile-competition m-t-2 card">
+<div class="card-header sort">
+    <span>Sort by:</span>
+</div>
+<div class="card-block action">
+    <ul class="nav navbar-nav">
+        <li [class.selected]="current_tab == 'Completed'" class="nav-item" (click)="getCompletedCP($event)">Completed</li>
+        <li [class.selected]="current_tab == 'Active'" class="nav-item" (click)="getActivateCP($event)">Active</li>
+        <li [class.selected]="current_tab == 'Tutorial'" class="nav-item" (click)="getTutorialCP($event)">Tutorial</li>
+    </ul>
+</div>
+<div class="card-block border-top text-xs-center" [hidden]="competitions?.length || isLoading">
+    <p class="card-text text-muted">No competitions to show</p>
+</div>
+<div class="card-block border-top text-xs-center" [hidden]="!isLoading">
+    <p class="card-text text-muted">Loading competitions...</p>
+</div>
+<div [hidden]="isLoading || !competitions?.length">
+    <div class="c-item border-top" *ngFor="let competition of competitions">
+        <div class="row" style="padding: 1rem 2rem">
+            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 pull-left">
+                <div class="item-image text-xs-center p-b-1">
+                    <a [routerLink]="['/c', competition.slug]">
+                        <img src="{{ competition.logo }}">
+                    </a>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 pull-right">
+                <div class="item-info">
+                    <h4 class="title">
+                        <a [routerLink]="['/c', competition.slug]">{{ competition.title }}</a>
+                    </h4>
+                    <div class="description">
+                        <p>{{ competition.short_description }}</p>
+                    </div>
+                    <div class="end text-muted">
+                        <span class="fa fa-flag-checkered"></span>
+                        {{ competition.end_time | date:'longDate' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div *ngIf="show_more && !isLoading" class="text-xs-center">
+    <a (click)="getMoreCompetitions()">Show more...</a>
+</div>

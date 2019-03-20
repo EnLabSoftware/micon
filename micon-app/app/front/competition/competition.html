@@ -1,0 +1,24 @@
+<div class="container" *ngIf="!error">
+    <div class="row">
+        <cp-header [competition]="competition"></cp-header>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-5 col-md-4">
+            <cp-sidebar [competition]="competition" [isLoggedIn]="isLoggedIn" (onTab)="onTab($event)" [current_page]="current_tab"></cp-sidebar>
+        </div>
+        <cp-data *ngIf="current_tab=='cp_data'" [competition]="competition"></cp-data>
+        <cp-details *ngIf="current_tab=='cp_details'" [competition]="competition"></cp-details>
+        <cp-submissions *ngIf="current_tab=='cp_submissions'" [competition]="competition" (onTab)="onTab($event)"></cp-submissions>
+        <frm-submission *ngIf="current_tab=='sm_attach'" [competition]="competition" (onSubmission)="onSubmission($event)"></frm-submission>
+        <cp-prizes *ngIf="current_tab=='cp_prizes'" [competition]="competition"></cp-prizes>
+        <cp-forums *ngIf="current_tab=='cp_forums'" [competition]="competition" (onTab)="onTab($event)"></cp-forums>
+        <tp-form *ngIf="current_tab=='tp-form'" [competition]="competition"></tp-form>
+        <cp-leaderboard *ngIf="current_tab=='cp_leaderboard'" [competition]="competition" [sub_id]="sub_id" (onTab)="onTab($event)"></cp-leaderboard>
+        <tp-details *ngIf="current_tab=='tp_details'" [competition]="competition" [tp_slug]="tp_slug" (onTab)="onTab($event)"></tp-details>
+    </div>
+</div>
+<div *ngIf="error">
+   <ba-error [status]="error.status"></ba-error>
+</div>
+

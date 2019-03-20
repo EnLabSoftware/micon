@@ -1,0 +1,63 @@
+<div class="cpl-header card-block">
+    <h1 class="header-title vertical-center display-4 m-a-0">Competitions</h1>
+</div>
+
+<div class="container">
+    <div class="cpl-wrap card m-t-3">
+        <div class="cpl-bar">
+            <ul class="list-unstyled vertical text-muted">
+                <li [class.selected]="current_tab == 'Active'" (click)="getActivate($event)"><span>Active</span></li>
+                <li [class.selected]="current_tab == 'All'" (click)="getAvailable($event)"><span>All</span></li>
+                <li *ngIf="isLoggedIn" [class.selected]="current_tab == 'Entered'" (click)="getEntered($event)"><span>Entered</span></li>
+            </ul>
+        </div>
+
+        <div class="card-block text-xs-center border-top" [hidden]="competitions?.length || isLoading">
+            <p class="card-text text-muted">No competitions to show</p>
+        </div>
+        <div class="card-block text-xs-center border-top" [hidden]="!isLoading">
+            <p class="card-text text-muted"><i class="fa fa-spinner fa-spin"></i> Loading competitions...</p>
+        </div>
+
+        <div class="cpl-grid" [hidden]="isLoading || !competitions?.length">
+            <template ngFor let-competition [ngForOf]="competitions" let-myIndex="index">
+                <div class="c-item border-top {{ competition.slug }}">
+                    <div class="card-block">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 pull-left">
+                                <div class="item-image text-xs-center p-b-1">
+                                    <a [routerLink]="['/c', competition.slug]">
+                                        <img [lazyLoad]="competition.logo">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 pull-right">
+                                <div class="row">
+                                    <div class="col-xs-9 col-md-10 item-info">
+                                        <h4 class="title">
+                                            <a [routerLink]="['/c', competition.slug]">{{ competition.title }}</a>
+                                        </h4>
+                                        <div class="description">
+                                            <p>{{ competition.short_description }}</p>
+                                        </div>
+                                        <div class="end text-muted">
+                                            <span class="fa fa-flag-checkered"></span>
+                                            {{ competition.end_time | date:'longDate' }}
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 col-md-2 text-muted">
+                                        <span style="display: block; font-size: 20px">$ {{ competition.total_prizes | number : '1.0-0' }}</span>
+                                        <span><i class="fa fa-user"></i> {{ competition.players }} players</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+    <div *ngIf="show_more && !isLoading" class="text-xs-center m-t-2 m-b-3">
+        <button class="btn btn-secondary show_more" (click)="getMoreCompetitions()">Show more...</button>
+    </div>
+</div>

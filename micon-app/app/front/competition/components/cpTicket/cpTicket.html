@@ -1,0 +1,23 @@
+<div *ngIf="pay_with_stripe">
+    <div class="col-xs-12 col-md-5 text-xs-center m-b-2">
+        <h6>Pay with Credit Card</h6>
+        <div (click)="payByCard();" style="cursor: pointer;">
+            <img src="/static/app/assets/img/cc-icon.png" style="max-width: 190px;">
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-2 text-xs-center m-b-2">
+        <h6>Or</h6>
+    </div>
+    <div class="col-xs-12 col-md-5 text-xs-center m-b-2">
+        <h6>Pay with PayPal</h6>
+        <div id="paypalButton" style="margin: 0 auto; width: 150px !important;"></div>
+    </div>
+</div>
+<div *ngIf="!pay_with_stripe">
+    <div class="col-xs-12 col-md-12 text-xs-center m-b-2">
+        <h6>Pay with PayPal</h6>
+        <div id="paypalButton" style="margin: 0 auto; width: 150px !important;"></div>
+    </div>
+</div>
+
+

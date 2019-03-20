@@ -1,0 +1,17 @@
+<div class="col-xs-12 col-sm-7 col-md-8">
+    <div class="card border-radius-0">
+        <div class="card-block">
+            <div id="comp-prizes">
+                <div class="data">
+                    <h5 class="card-title">Prizes</h5>
+                    <ul class="m-t-1 p-l-1" *ngIf="prizeList?.length && competition.id">
+                        <li *ngFor="let p of prizeList">{{ p.name }} - {{ p.money | currency:'USD':true:'1.0-0' }}</li>
+                    </ul>
+                    <p class="m-t-1" *ngIf="!prizeList?.length && competition.id && !isLoading">This competition has no prize</p>
+                    <p class="m-t-1" *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i> The prizes is loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

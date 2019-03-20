@@ -1,0 +1,127 @@
+<div class="col-xs-12 col-sm-7 col-md-8">
+    <div class="card border-radius-0" *ngIf="!isLoggedIn">
+        <div class="card-block text-xs-center">
+            <a [routerLink]="['/register']" type="button" class="btn btn-primary border-radius-0">Sign up</a>
+            or have an account? <a [routerLink]="['/login']">Login</a>
+        </div>
+    </div>
+    <div class="card border-radius-0" *ngIf="competition.is_activate && isLoggedIn && competition.can_submission"
+         id="submission-form">
+        <div class="card-block">
+            <div id="submission-form" *ngIf="is_smForm || competition.ticketed || !competition.can_ticket">
+                <h5 class="card-title">Make a submission</h5>
+
+                <div class="form" *ngIf="competition.can_entries > 0">
+                    <div class="info-message bg-danger m-b-1 p-a-1" *ngIf="error_msg">
+                        <span class="note-icon fa fa-times"></span>
+                        <strong>Error Message: </strong>{{ error_msg }}
+                    </div>
+                    <div class="info-message bg-warning m-b-1" *ngIf="!competition.can_ticket && !competition.ticketed">
+                        <span class="note-icon fa fa-info-circle"></span>
+                        The ticketing deadline has already passed and you did not purchase a ticket. You will not get
+                        the prize if you are the winner.
+                    </div>
+                    <div class="info-message m-b-2">
+                        <span class="note-icon fa fa-info-circle"></span>
+                        <strong>You have {{ competition.can_entries }} entries today.</strong>
+                        This resets {{ limit_hours }} hour<span *ngIf="limit_hours > 1">s</span> from now (00:00 UTC)
+                    </div>
+                    <form class="form-horizontal" novalidate #f="ngForm" (ngSubmit)="formSubmit(submission.file)">
+                        <div class="row m-b-1 form-group" [class.has-error]="!submission.file && f.submitted">
+                            <div class="col-sx-12 col-md-8 m-b-1" [class.beingProcessed]="isUploading">
+                                <div id="submission-input">
+                                    <ba-file-input #file="ngModel" required [(ngModel)]="submission.file"
+                                                   [ngModelOptions]="{standalone: true}"
+                                                   [accept]="'.csv, '"></ba-file-input>
+                                    <button class="file-button">Click or drop your submission here</button>
+                                    <div class="file-name" *ngIf="submission.file">{{ submission.file.name }}</div>
+                                </div>
+                                <small [hidden]="submission.file || (!submission.file && !f.submitted)"
+                                       class="text-danger">
+                                    No file was detected with your submission. Did you abort the upload?
+                                </small>
+                            </div>
+                            <div class="col-sx-12 col-md-4 text-muted">
+                                <h6><i class="fa fa-file-text-o m-r-1"></i>File Format</h6>
+                                <small>Your submission should be in CSV format</small>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sx-12 col-md-12 m-b-1" [class.beingProcessed]="isUploading">
+                                        <textarea name="description" [(ngModel)]="submission.description"
+                                                  rows="7" class="form-control p-a-1" style="width: 100%"
+                                                  placeholder="Enter a brief description of this submission here"></textarea>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sx-12 col-md-8 text-xs-center actions">
+                                <button type="button" class="btn btn-primary btn-lg border-radius-0" *ngIf="isUploading"
+                                        disabled>Uploading...
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-lg border-radius-0"
+                                        *ngIf="!isUploading">Submit
+                                </button>
+                                <button type="button" class="btn btn-default btn-lg border-radius-0"
+                                        *ngIf="!isUploading" (click)="reset_form()">Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="messages" *ngIf="isLoggedIn && competition.can_entries <= 0">
+                    <div class="info-message text-danger">
+                        <span class="note-icon fa fa-info-circle"></span>
+                        <strong>You have {{ competition.can_entries }} entries today. </strong>
+                        Please try again after about {{ limit_hours }} hour<span *ngIf="limit_hours > 1">s</span> from
+                        now (00:00 UTC).
+                    </div>
+                </div>
+            </div>
+
+            <div id="ticket-form" *ngIf="is_payForm && !competition.ticketed && competition.can_ticket">
+                <h5 class="card-title">Select Payment Method</h5>
+
+                <div class="row m-t-3">
+                    <cp-ticket [competition]="competition"></cp-ticket>
+                </div>
+                <div class="row">
+                    <div class="col-sx-12 col-md-12 text-xs-center actions">
+                        <button type="button" class="btn btn-default border-radius-0" (click)="is_payForm=false">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="submit-note" *ngIf="competition.can_ticket && !competition.ticketed && !is_smForm && !is_payForm">
+                <h5 class="card-title">Submit to {{ competition.title }}</h5>
+
+                <div class="info-message m-b-2">
+                    <span class="note-icon fa fa-info-circle"></span>
+                    You should purchase a ticket before <strong>{{ competition.end_time | date:'longDate' }}</strong> to
+                    have a chance to win the prize (<a href="#">read more</a>).
+                </div>
+                <div class="row m-t-3">
+                    <div class="col-xs-12 col-md-6 text-xs-center m-b-2">
+                        <button type="button" class="btn btn-lg btn-primary border-radius-0" (click)="is_smForm=true"
+                                [style.width.px]="220">
+                            Make a submission
+                        </button>
+                    </div>
+                    <div class="col-xs-12 col-md-6 text-xs-center m-b-2">
+                        <button type="button" class="btn btn-lg btn-primary border-radius-0" (click)="is_payForm=true"
+                                [style.width.px]="220">
+                            Purchase a ticket
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card border-radius-0"
+         *ngIf="(competition.id && !competition.is_activate) || !competition.can_submission">
+        <div class="card-block">
+            This competition is not available for submissions.
+        </div>
+    </div>
+</div>

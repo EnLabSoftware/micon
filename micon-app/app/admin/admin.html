@@ -1,0 +1,16 @@
+<ba-sidebar></ba-sidebar>
+<ba-page-top></ba-page-top>
+<div class="al-main">
+    <div class="al-content">
+        <ba-content-top></ba-content-top>
+        <p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+        <p-growl [value]="msgs"></p-growl>
+        <router-outlet></router-outlet>
+    </div>
+</div>
+<footer class="al-footer clearfix">
+    <div class="al-footer-main clearfix">
+        <div class="al-copy">©2016</div>
+    </div>
+</footer>
+<ba-back-top position="200"></ba-back-top>

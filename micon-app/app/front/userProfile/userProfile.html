@@ -1,0 +1,371 @@
+<div id="user-profile" *ngIf="!error">
+<div style="background-color: #8CD6B4;">
+    <div class="container" style="height: auto;display: flex;flex-flow: column nowrap;">
+        <div class="profile-header m-t-3" style="background-color: #FFF;">
+            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 pull-left">
+                <div *ngIf="!isLoggedInUser" class="avatar-view">
+                    <img *ngIf="account.avatar" src="{{ account.avatar }}">
+                    <img *ngIf="!account.avatar" src="{{ defaultImage }}">
+                </div>
+                <div *ngIf="isLoggedInUser" style="margin-left: -15px">
+                    <ba-avatar-input required #avatar="ngModel" (onChange)="avatarChange()"
+                                     [picture]="account.avatar" [(ngModel)]="account.avatar"
+                                     [defaultPicture]="defaultImage"
+                                     [ngModelOptions]="{standalone: true}"></ba-avatar-input>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 pull-right">
+                <div class="profile-info">
+                    <h4 class="m-t-1" style="font-size: 1.5rem">{{ account.display_name }}</h4>
+                    <div>
+                        <p>{{ account.email }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="container" style="height: auto;display: flex;flex-flow: column nowrap;">
+        <div class="profile-wrapper card" style="border-radius: 0px; margin-bottom: 0">
+            <div class="profile-tab p-l-2">
+                <ul class="nav navbar-nav">
+                    <li *ngIf="isLoggedInUser" class="nav-item" [class.selected]="current_tab == 'Competitions'" (click)="getTab('Competitions')">
+                        <span>My Competitions</span>
+                    </li>
+                    <li *ngIf="isLoggedInUser" class="nav-item" [class.selected]="current_tab == 'Account'" (click)="getTab('Account')">
+                        <span>Profile</span>
+                    </li>
+                    <li *ngIf="!isLoggedInUser" class="nav-item" [class.selected]="current_tab == 'Home'" (click)="getTab('Home')">
+                        <span>Home</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div *ngIf="current_tab == 'Account' && isLoggedInUser" class="profile-info m-t-2 card">
+            <div *ngIf="!account.display_name && isLoggedInUser" class="bg-danger">
+                <small>Some required information is missing or incomplete. Please correct.
+                </small>
+            </div>
+            <div class="card-header">
+                <span>Account (User ID {{ account.user_id }})</span>
+                <div *ngIf="isLoggedInUser && isEditInfo" class="pull-right">
+                    <a (click)="cancelEditInfo($event)">Cancel</a>
+                    <a (click)="fSubmit(form.valid)">Save</a>
+                </div>
+                <div *ngIf="isLoggedInUser && !isEditInfo" class="pull-right">
+                    <a (click)="editInfo()">Edit</a>
+                </div>
+            </div>
+            <form class="form-horizontal" novalidate #form="ngForm">
+                <div class="card-block">
+                    <div class="form-group">
+                        <label class="m-b-0">User Name</label>
+                        <strong>{{ account.username }}</strong>
+                        <small>Your username cannot be changed</small>
+                    </div>
+                </div>
+                <div class="card-block border-top">
+                    <div class="form-group">
+                        <label class="m-b-0">Email</label>
+                        <strong *ngIf="!isEditInfo">{{ account.email }}</strong>
+                        <div *ngIf="isEditInfo">
+                            <input required [(ngModel)]="account.email" #email="ngModel" (change)="onChangeEmail($event)"
+                                   name="email" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                            <div *ngIf="email.errors" class="text-danger">
+                                <small [hidden]="!email.errors.required">Email is required</small>
+                                <small [hidden]="!email.errors.pattern">Email is unformatted</small>
+                            </div>
+                            <small [hidden]="!isExistEmail" class="text-danger">
+                                {{ email_message }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-group">
+                    <div class="card no-border-left border-radius-0">
+                        <div class="card-block">
+                            <div class="form-group">
+                                <label class="m-b-0">First Name</label>
+                                <strong *ngIf="!isEditInfo">{{ account.first_name }}</strong>
+                                <div *ngIf="isEditInfo">
+                                    <input required minlength="2" [(ngModel)]="account.first_name" #first_name="ngModel"
+                                           name="first_name" class="form-control" pattern="[a-zA-Z]+">
+                                    <div *ngIf="first_name.errors" class="text-danger">
+                                        <small [hidden]="!first_name.errors.required">First name is required</small>
+                                        <small [hidden]="!first_name.errors.minlength">First name needs to be at least 2 characters</small>
+                                        <small [hidden]="!first_name.errors.pattern">First name contains only: a-z A-Z</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card no-border-right border-radius-0">
+                        <div class="card-block">
+                            <div class="form-group">
+                                <label class="m-b-0">Last Name</label>
+                                <strong *ngIf="!isEditInfo">{{ account.last_name }}</strong>
+                                <div *ngIf="isEditInfo">
+                                    <input required minlength="2" [(ngModel)]="account.last_name" #last_name="ngModel"
+                                           name="last_name" class="form-control" pattern="[a-zA-Z]+">
+                                    <div *ngIf="last_name.errors" class="text-danger">
+                                        <small [hidden]="!last_name.errors.required">Last name is required</small>
+                                        <small [hidden]="!last_name.errors.minlength">Last name needs to be at least 2 characters</small>
+                                        <small [hidden]="!last_name.errors.pattern">Last name contains only: a-z A-Z</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block">
+                    <div class="form-group">
+                        <label class="m-b-0">Display Name</label>
+                        <strong *ngIf="!isEditInfo">{{ account.display_name }}</strong>
+                        <small *ngIf="!isEditInfo">The name users will see publicly. We recommend using your full name.</small>
+                        <div *ngIf="isEditInfo">
+                            <input required minlength="2" [(ngModel)]="account.display_name" (change)="onDisplayName($event)" pattern="[a-zA-Z\s]+"
+                                   (keydown)="onDisplayName($event)" #display_name="ngModel" name="display_name" class="form-control">
+                            <div *ngIf="display_name.errors" class="text-danger">
+                                <small [hidden]="!display_name.errors.required">Display name is required</small>
+                                <small [hidden]="!display_name.errors.minlength">Display name needs to be at least 2 characters</small>
+                                <small [hidden]="!display_name.errors.pattern">Display name contains only: a-z A-Z</small>
+                            </div>
+                            <small>The name users will see publicly. We recommend using your full name</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block border-top">
+                    <div class="form-group">
+                        <label class="m-b-0">Date of birth</label>
+                        <strong *ngIf="!isEditInfo && !account.birthday">{{ account.birth_day }}</strong>
+                        <strong *ngIf="!isEditInfo && account.birthday">{{ account.birth_day | date:"MM/dd/yyyy" }}</strong>
+                        <div *ngIf="isEditInfo">
+                            <p-calendar [(ngModel)]="bday" [ngModelOptions]="{standalone: true}"
+                                        #birth_day="ngModel" readonlyInput="true" [monthNavigator]="true"
+                                        [yearNavigator]="true" yearRange="1900:2017"></p-calendar>
+                            <div *ngIf="birth_day.errors" class="text-danger">
+                                <small [hidden]="!birth_day.errors.required">Date of birth is required</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block border-top">
+                    <div class="form-group">
+                        <label class="m-b-0">Phone number</label>
+                        <strong *ngIf="!isEditInfo">{{ account.phone_number }}</strong>
+                        <div *ngIf="isEditInfo">
+                            <input required minlength="10" maxlength="11" [(ngModel)]="account.phone_number"
+                                   #phone_number="ngModel" name="phone_number" class="form-control" pattern="[0-9]+">
+                            <div *ngIf="phone_number.errors" class="text-danger">
+                                <small [hidden]="!phone_number.errors.pattern">Phone number contains only numbers</small>
+                                <small [hidden]="!phone_number.errors.required">Phone number is required</small>
+                                <small [hidden]="!phone_number.errors.minlength">Phone number needs to be 10 or 11 digits</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-block border-top">
+                    <div class="form-group">
+                        <label class="m-b-0">Gender</label>
+                        <strong *ngIf="!isEditInfo && account.gender==0">Male</strong>
+                        <strong *ngIf="!isEditInfo && account.gender==1">Female</strong>
+                        <select *ngIf="isEditInfo" class="form-control" required [(ngModel)]="account.gender" #gender="ngModel" name="gender">
+                            <option *ngFor="let g of genders" [ngValue]="g.value"
+                                    [selected]="g.value === account.gender">{{ g.name }}</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <!--<user-info [isLoggedInUser]="isLoggedInUser" [account]="account" (onReload)="ReloadAccount($event)"></user-info> -->
+        </div>
+        <div *ngIf="current_tab == 'Account' && isLoggedInUser" class="profile-password m-t-2 card">
+            <div class="card-header">
+                <span>My logins</span>
+            </div>
+            <div class="card-block">
+                <h2>Active logins</h2>
+                <div class="row" style="display: flex; align-items: center">
+                    <div class="col-md-3 logo m-l-2"></div>
+
+                    <div class="col-md-9">
+                        <form [formGroup]="changePwdForm" class="form-horizontal">
+                            <h3>Micon username: <strong>{{ account.username }}</strong></h3>
+                            <div *ngIf="isChangePwd" class="form-group">
+                                <label class="form-label">Current password</label>
+                                <input [formControl]="currentPassword" class="form-control form-control-sm" type="password">
+                                <small *ngIf="isIncorrectPwd" class="text-danger">Passwords don't match</small>
+                            </div>
+                            <div *ngIf="isChangePwd" class="form-group">
+                                <label class="form-label">New password</label>
+                                <input [formControl]="password" class="form-control form-control-sm" type="password" pattern="[a-zA-Z0-9]+">
+                                <div *ngIf="!password.valid && password.touched" class="text-danger">
+                                    <span *ngIf="password.errors.pattern">Password contains only: a-z A-Z 0-9</span>
+                                </div>
+                            </div>
+                            <div *ngIf="isChangePwd" class="form-group">
+                                <label class="form-label">Confirm new password</label>
+                                <input [formControl]="repeatPassword" class="form-control form-control-sm" type="password">
+                                <div *ngIf="!passwords.valid && (password.touched || repeatPassword.touched)"
+                                     class="text-danger">
+                                    <small class="text-danger">Passwords don't match</small>
+                                </div>
+                            </div>
+                            <a *ngIf="!isChangePwd && !account.is_social" (click)="changePwd($event)">Change password</a>
+                            <button class="btn btn-primary" [disabled]="!changePwdForm.valid"
+                                    *ngIf="isChangePwd" (click)="SaveChangePwd(changePwdForm.value)">Save</button>
+                            <button class="btn btn-secondary" *ngIf="isChangePwd" (click)="cancelChangePwd($event)">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="current_tab == 'Competitions' && isLoggedInUser">
+            <cp-entered></cp-entered>
+        </div>
+        <div *ngIf="current_tab == 'Home' && !isLoggedInUser" class="user-home m-t-2 card-deck-wrapper">
+            <div class="card-deck">
+                <div class="card">
+                    <div class="card-header">
+                        <span>Competitions Contributor</span>
+                        <img src="https://www.kaggle.com/static/images/tiers/contributor@48.png">
+                    </div>
+                    <div class="card-block text-xs-center">
+                        <a>Unranked</a>
+                    </div>
+                    <div class="card-group">
+                        <div class="card gold">
+                            <div class="card-block">
+                                <img class="card-img-top" src="https://www.kaggle.com/static/images/medals/competitions/goldL@1x.png" alt="Card image cap">
+                            </div>
+                            <div class="card-block text-xs-center">
+                                <span>0</span>
+                            </div>
+                        </div>
+                        <div class="card silver">
+                            <div class="card-block">
+                                <img class="card-img-top" src="https://www.kaggle.com/static/images/medals/competitions/silverL@1x.png" alt="Card image cap">
+                            </div>
+                            <div class="card-block text-xs-center">
+                                <span>0</span>
+                            </div>
+                        </div>
+                        <div class="card bronze">
+                            <div class="card-block">
+                                <img class="card-img-top" src="https://www.kaggle.com/static/images/medals/competitions/bronzeL@1x.png" alt="Card image cap">
+                            </div>
+                            <div class="card-block text-xs-center">
+                                <span>0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-block text-xs-center">
+                        <span>No competition results</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <span>Kernels Contributor</span>
+                        <img src="https://www.kaggle.com/static/images/tiers/contributor@48.png">
+                    </div>
+                    <div class="card-block text-xs-center">
+                        <a>Unranked</a>
+                    </div>
+                    <div class="card-group">
+                        <div class="card gold">
+                            <div class="card-block">
+                                <img class="card-img-top" src="https://www.kaggle.com/static/images/medals/kernels/goldL@1x.png" alt="Card image cap">
+                            </div>
+                            <div class="card-block text-xs-center">
+                                <span>0</span>
+                            </div>
+                        </div>
+                        <div class="card silver">
+                            <div class="card-block">
+                                <img class="card-img-top" src="https://www.kaggle.com/static/images/medals/kernels/silverL@1x.png" alt="Card image cap">
+                            </div>
+                            <div class="card-block text-xs-center">
+                                <span>0</span>
+                            </div>
+                        </div>
+                        <div class="card bronze">
+                            <div class="card-block">
+                                <img class="card-img-top" src="https://www.kaggle.com/static/images/medals/kernels/bronzeL@1x.png" alt="Card image cap">
+                            </div>
+                            <div class="card-block text-xs-center">
+                                <span>0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-block text-xs-center">
+                        <span>No kernel results</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <span>Discussion Contributor</span>
+                        <img src="https://www.kaggle.com/static/images/tiers/contributor@48.png">
+                    </div>
+                    <div class="card-block text-xs-center">
+                        <a>Unranked</a>
+                    </div>
+                    <div class="card-group">
+                        <div class="card gold">
+                            <div class="card-block">
+                                <img class="card-img-top" src="https://www.kaggle.com/static/images/medals/discussion/goldL@1x.png" alt="Card image cap">
+                            </div>
+                            <div class="card-block text-xs-center">
+                                <span>0</span>
+                            </div>
+                        </div>
+                        <div class="card silver">
+                            <div class="card-block">
+                                <img class="card-img-top" src="https://www.kaggle.com/static/images/medals/discussion/silverL@1x.png" alt="Card image cap">
+                            </div>
+                            <div class="card-block text-xs-center">
+                                <span>0</span>
+                            </div>
+                        </div>
+                        <div class="card bronze">
+                            <div class="card-block">
+                                <img class="card-img-top" src="https://www.kaggle.com/static/images/medals/discussion/bronzeL@1x.png" alt="Card image cap">
+                            </div>
+                            <div class="card-block text-xs-center">
+                                <span>0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-block text-xs-center">
+                        <span>No discussion results</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<p-dialog header="Add new slide" [(visible)]="display_upload" modal="true" width="600" resizable="false">
+<div class="widgets">
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-horizontal" novalidate #f="ngForm" (ngSubmit)="formSubmit(avatar_uploaded.image)">
+                <input #fileInput type="file" (change)="fileChangeListener($event)" style="display: none">
+                <img-cropper #cropper [image]="avatar_uploaded" [settings]="cropperSettings1" (onCrop)="cropped($event)"></img-cropper>
+                <div class="form-group row" style="display: flex">
+                    <div style="width: 33%; margin: 0 auto">
+                        <button type="button" class="btn btn-secondary border-radius-0" (click)="fileInput.click()">Upload</button>
+                        <button type="submit" class="btn btn-primary border-radius-0 pull-right">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</p-dialog>
+
+<div *ngIf="error">
+   <ba-error [status]="error.status"></ba-error>
+</div>

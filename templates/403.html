@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Mesh</title>
+    <script src="{{ STATIC_URL }}js/jquery-1.11.3.min.js"></script>
+    <style>
+        .floating-box {
+            float: left;
+            margin-top: 70px;
+            margin-left: 10px;
+
+        }
+
+        .floating-img {
+            float: left;
+            margin-top: 70px;
+            margin-left: 50px;
+
+        }
+
+        a {
+            text-decoration: none;
+            margin-left: 5px;
+        }
+
+        h2 {
+            margin-bottom: 5px;
+            font-size: 28px;
+        }
+
+        body {
+            background: #FFF;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+        }
+    </style>
+</head>
+<body>
+<div class="floating-img"><img src="{{ STATIC_URL }}mashboot/img/icons/denied.png" alt=""></div>
+<div class="floating-box"><h2 style="color: #333333;font-weight: normal;"> You do not have permission to view this record</h2>
+    <a class="home" href="#">Back to previous page</a>
+</div>
+<script>
+    $('.home').on('click', function () {
+        history.back();
+    });
+</script>
+</body>
+</html>

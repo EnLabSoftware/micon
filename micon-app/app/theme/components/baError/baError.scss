@@ -1,0 +1,48 @@
+.error-wrap {
+  .exception-type {
+    padding: 100px;
+    padding-bottom: 0;
+    &.e-404 {
+      background-color: #3f51b5;
+    }
+    &.e-401 {
+      background-color: #e91e63;
+    }
+    &.e-error {
+      background-color: #e62a10;
+    }
+  }
+  .exception-panel {
+    text-align: center;
+    width: 350px;
+    margin: -10% auto 0 auto;
+    z-index: 100;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+    -moz-border-radius: 2px;
+    background: #ffffff;
+    box-sizing: border-box;
+    h1 {
+      font-size: 36px;
+      line-height: 36px;
+      color: #757575;
+    }
+    i {
+      font-size: 72px;
+      &.e-404 {
+        color: #9fa8da;
+      }
+      &.e-401 {
+        color: #f48fb1;
+      }
+      &.e-error {
+        color: #f79a84;
+      }
+    }
+    .exception-detail {
+      margin: 20px 0px 100px 0px;
+      color: #757575;
+    }
+  }
+}

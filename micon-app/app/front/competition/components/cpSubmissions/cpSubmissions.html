@@ -1,0 +1,122 @@
+<div class="col-xs-12 col-sm-7 col-md-8">
+    <div class="card border-radius-0">
+        <div class="card-block">
+            <div id="comp-submissions">
+                <h5 class="card-title">Your Submissions</h5>
+
+                <p>
+                    <strong>Note: </strong>You can select up to <strong>2</strong> submissions to be used to calculate
+                    your final leaderboard score.
+                    If 2 submissions are not selected, they will be chosen based on your best submission scores on the
+                    public leaderboard.
+                </p>
+
+                <p>
+                    Your final score will not be based on the same exact subset data as the public leaderboard,
+                    but rather a different private data subset of your full submission—your public score is only a rough
+                    indication of what your final score is.
+                    You should thus choose submissions that will most likely be best overall, and not necessarily just
+                    on the public subset.
+                </p>
+
+                <div class="submissions-table">
+                    <p class="m-t-1 text-xs-center" *ngIf="isLoading">
+                        <i class="fa fa-spinner fa-spin"></i> The submissions is loading...</p>
+                    <p-dataTable [value]="submissions" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true"
+                                 [stacked]="stacked" expandableRows="true" *ngIf="!isLoading">
+                        <p-column expander="true" styleClass="col-icon"></p-column>
+                        <p-column field="uploaded" [sortable]="true" header="Uploaded">
+                            <template let-data="rowData" pTemplate type="body">
+                                {{ data.uploaded | date:'medium' }}
+                            </template>
+                        </p-column>
+                        <p-column field="name" header="File">
+                            <template let-data="rowData" pTemplate type="body">
+                                <a href="{{ data.url }}" class="text-primary">
+                                    {{ data.name }}
+                                </a>
+                            </template>
+                        </p-column>
+                        <p-column field="score" [sortable]="true" header="Public Score" styleClass="text-xs-center">
+                            <template let-data="rowData" pTemplate type="body">
+                                <strong *ngIf="!data.is_valid" class="text-danger">Error</strong>
+                                <span *ngIf="data.processed && data.is_valid">{{ data.score | number: '1.0-5' }}</span>
+                                <span *ngIf="!data.processed && data.is_valid" class="text-muted">Scoring</span>
+                            </template>
+                        </p-column>
+                        <footer>There are {{ submissions?.length }} submissions</footer>
+                        <template let-data>
+                            <div class="ui-grid ui-grid-responsive">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-12">
+                                        <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                                            <div class="ui-grid-row">
+                                                <div class="ui-grid-col-2 text-muted"><strong>File: </strong></div>
+                                                <div class="ui-grid-col-10">{{ data.name }}</div>
+                                            </div>
+                                            <div class="ui-grid-row" *ngIf="data.description">
+                                                <div class="ui-grid-col-2 text-muted"><strong>Description: </strong>
+                                                </div>
+                                                <div class="ui-grid-col-10">{{ data.description }}</div>
+                                            </div>
+                                            <div class="ui-grid-row" *ngIf="!data.is_valid">
+                                                <div class="ui-grid-col-2 text-muted"><strong>Submision
+                                                    info/warnings: </strong></div>
+                                                <div class="ui-grid-col-10">{{ data.message_log }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-grid">
+                                <button type="button" class="btn btn-link btn-sm" (click)="onEdit(data)">
+                                    <i class="fa fa-edit"></i> Edit Description
+                                </button>
+                                <a href="{{ data.url }}" class="btn btn-link text-primary"><i
+                                        class="fa fa-download"></i> Download</a>
+                            </div>
+                        </template>
+                    </p-dataTable>
+                    <p-dialog
+                            [appendTo]="formSettings.appendTo"
+                            [(header)]="formSettings.header"
+                            [(modal)]="formSettings.modal"
+                            [(visible)]="formSettings.visible"
+                            [(draggable)]="formSettings.draggable"
+                            [(resizable)]="formSettings.resizable"
+                            [(responsive)]="formSettings.responsive"
+                            [(width)]="formSettings.width" *ngIf="formSettings.visible">
+                        <form class="form-horizontal" novalidate #f="ngForm" (ngSubmit)="formSubmit(f.valid)">
+                            <div class="row">
+                                <label for="inputID" class="form-control-label">UID: <strong>{{ editRow.uid }}</strong></label>
+                            </div>
+                            <div class="row" [class.has-error]="!description.valid && f.submitted">
+                                <label for="inputDescription" class="form-control-label">Description: </label>
+
+                                <div class="col-sm-12">
+                                            <textarea rows="6" required #description="ngModel"
+                                                      [(ngModel)]="editRow.description"
+                                                      name="description" class="form-control"
+                                                      style="width: 100%"></textarea>
+                                    <small [hidden]="description.valid || (description.pristine && !f.submitted)"
+                                           class="text-danger">
+                                        Description is required.
+                                    </small>
+                                </div>
+                            </div>
+                            <footer>
+                                <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                    <button type="button" pButton icon="fa-close" (click)="hideDialog()"
+                                            label="Cancel"></button>
+                                    <button type="submit" pButton icon="fa-check" label="Edit"></button>
+                                </div>
+                            </footer>
+                        </form>
+                    </p-dialog>
+                    <a class="btn btn-primary-outline border-radius-0 m-t-1" (click)="getTab()"
+                       *ngIf="competition.is_activate && competition.can_submission">Make a submission »</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

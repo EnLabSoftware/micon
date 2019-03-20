@@ -1,0 +1,12 @@
+#disqus_thread {
+     position: relative;
+}
+#disqus_thread:after {
+     content: "";
+     display: block;
+     height: 59px;
+     width: 100%;
+     position: absolute;
+     bottom: 1px;
+     background: white;
+}

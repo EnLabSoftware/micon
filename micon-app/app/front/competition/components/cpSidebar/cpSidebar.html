@@ -1,0 +1,54 @@
+<div *ngIf="current_page!='cp_leaderboard'" id="comp-sidebar">
+    <div class="card border-radius-0">
+        <div id="comp-dashboard">
+            <h6 class="card-header">Dashboard</h6>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" [class.selected]="current_page=='cp_details'" (click)="getTab('cp_details')">
+                    <a>Information <i class="fa fa-info-circle pull-right"></i></a>
+                </li>
+                <li class="list-group-item" [class.selected]="current_page=='cp_data'" *ngIf="!competition.is_incoming" (click)="getTab('cp_data')">
+                    <a>Data <i class="fa fa-files-o pull-right"></i></a>
+                </li>
+                <li class="list-group-item" [class.selected]="current_page=='cp_prizes'" *ngIf="!competition.is_incoming" (click)="getTab('cp_prizes')">
+                    <a>Prizes <i class="fa fa-money pull-right"></i></a>
+                </li>
+                <li class="list-group-item" [class.selected]="current_page=='sm_attach'" *ngIf="competition.is_activate && competition.can_submission" (click)="getTab('sm_attach')">
+                    <a>Make a submission <i class="fa fa-upload pull-right"></i></a>
+                </li>
+                <li class="list-group-item" [class.selected]="current_page=='cp_forums'" (click)="getTab('cp_forums')">
+                    <a>Forum <i class="fa fa-comments pull-right"></i></a>
+                </li>
+                <li class="list-group-item" [class.selected]="current_page=='cp_leaderboard'" *ngIf="!competition.is_incoming" (click)="getTab('cp_leaderboard')">
+                    <a>Leaderboard <i class="fa fa-tasks pull-right"></i></a>
+                </li>
+                <li class="list-group-item" [class.selected]="current_page=='cp_submissions'" *ngIf="isLoggedIn && !competition.is_incoming" (click)="getTab('cp_submissions')">
+                    <a>My submissions <i class="fa fa-file pull-right"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card m-t-2 hidden-xs-down border-radius-0" *ngIf="leaderboard?.length && !leaderboard_error && !competition.is_incoming">
+        <div class="comp-board">
+            <h6 class="card-header">
+                Public Leaderboard
+            </h6>
+            <div class="card-block">
+                <ol class="p-a-0 p-l-1 m-a-0 text-muted">
+                    <li *ngFor="let p of leaderboard | slice:0:10">{{p.user_name}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-block hidden-xs-down border-radius-0" *ngIf="!competition.is_incoming">
+        <div id="comp-stats">
+            <h4 class="players text-muted">
+                <i class="fa fa-user m-r-1"></i><strong>{{ competition.players }}</strong> players
+            </h4>
+            <h4 class="entries text-muted">
+                <i class="fa fa-upload m-r-1"></i><strong>{{ competition.entries }}</strong> entries
+            </h4>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+.cpl-header {
+  background: #0088C0;
+  height: 250px;
+  .header-title {
+    color: #FFF;
+  }
+}
+
+.item-title {
+  a {
+    color: #209e91;
+    font-weight: bold;
+    text-decoration: none;
+    &:hover {
+      color: #111;
+    }
+  }
+}
+
+.item-thumb {
+  max-width: 100%;
+}

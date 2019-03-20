@@ -1,0 +1,104 @@
+<div class="container" *ngIf="!error">
+    <div class="row">
+        <div class="col-xs-12">
+            <ol class="breadcrumb border-radius-0">
+                <li class="breadcrumb-item"><a (click)="getTab('cp_details')">
+                    <i class="fa fa-home text-muted"></i> Dashboard</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a (click)="getTab('cp_data')">Data</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a (click)="getTab('cp_forums')">Forum</a>
+                </li>
+                <li class="breadcrumb-item active">Leaderboard</li>
+                <li *ngIf="isLoggedIn" class="breadcrumb-item">
+                    <a (click)="getTab('cp_submissions')">My submissions</a>
+                </li>
+                <li *ngIf="competition.can_submission" class="breadcrumb-item">
+                    <a (click)="getTab('sm_attach')">Make a submission</a>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="leaderboard-table">
+            <div class="col-xs-12 m-b-1 text-muted">
+                <div class="conditions">
+                    This leaderboard is calculated on approximately 30% of the test data.
+                    <br>
+                    The final results will be based on the other 70%, so the final standings may be different.
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <p class="m-t-1 text-xs-center" *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i> The Leaderboard is loading...</p>
+                <p-dataTable [value]="leaderboard" [responsive]="true" [styleClass]="'cp-prime-table'" [rowStyleClass]="customRowClass" *ngIf="leaderboard_visible && !isLoading">
+                    <p-column header="Rank" styleClass="col-width-100 text-md-center">
+                        <template let-index="rowIndex" let-data="rowData" pTemplate type="body">
+                            <span class="text-muted">{{ index + 1 }}</span>
+                        </template>
+                    </p-column>
+                    <p-column header="Δ1w" styleClass="col-width-100 text-md-center">
+                        <template let-data="rowData" pTemplate type="body">
+                            <span class="text-muted">
+                                <span class="rank down text-danger" *ngIf="data.delta>0">
+                                    <i>↓</i>{{ data.delta }}
+                                </span>
+                                <span class="rank up text-success" *ngIf="data.delta<0">
+                                    <i>↑</i>{{ data.delta * -1 }}
+                                </span>
+                                <span class="rank" *ngIf="data.delta==0">
+                                    <i>—</i>
+                                </span>
+                                <span class="rank" *ngIf="data.delta=='new'">
+                                    {{ data.delta }}
+                                </span>
+                            </span>
+                        </template>
+                    </p-column>
+                    <p-column field="user_name" header="Player Name" styleClass="text-md-left"></p-column>
+                    <p-column field="score" header="Score" styleClass="text-md-center">
+                        <template let-data="rowData" pTemplate type="body">
+                            <span class="text-primary">{{ data.score | number : '1.0-5' }}</span>
+                        </template>
+                    </p-column>
+                    <p-column field="entries" header="Entries" styleClass="col-width-100 text-md-center"></p-column>
+                    <p-column field="last_submission" header="Last submission" styleClass="text-md-left">
+                        <template let-data="rowData" pTemplate type="body">
+                            <span class="text-muted">{{ data.last_submission | date:'EEE, d MMM y HH:mm:ss' }}</span>
+                        </template>
+                    </p-column>
+                </p-dataTable>
+            </div>
+        </div>
+    </div>
+
+    <div id="process-wrap" *ngIf="leaderboard_processing">
+        <div class="modal fade in" style="display: block">
+            <div class="vertical-center">
+                <div class="waiting-box" *ngIf="!scoring_error">
+                    <div class="text-xs-center">
+                        <img src="/static/app/assets/img/scoring.gif" style="max-width: 200px;">
+                        <br>
+                        <strong>Taking your entry for a test drive. Please wait...</strong>
+                    </div>
+                </div>
+                <div class="waiting-box" *ngIf="scoring_error">
+                    <button type="button" class="close" (click)="leaderboard_processing=false">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <div class="text-xs-center text-danger">
+                        <img src="/static/app/assets/img/oops.png" style="max-width: 200px;">
+                        <br>
+                        <strong>An error has occurred when scoring your submission. Please contact the Administrator.</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade in"></div>
+    </div>
+</div>
+<div *ngIf="error">
+   <ba-error [status]="error.status"></ba-error>
+</div>

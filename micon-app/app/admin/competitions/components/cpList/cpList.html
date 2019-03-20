@@ -1,0 +1,49 @@
+<div class="widgets">
+    <div class="row">
+        <p-dataTable [value]="dataList" [rows]="20" [paginator]="true" [pageLinks]="3" [responsive]="true" [stacked]="stacked" expandableRows="true">
+            <p-column expander="true" styleClass="col-icon"></p-column>
+            <p-column field="title" header="Title" [filter]="true" filterMatchMode="contains"></p-column>
+            <p-column field="start_time" header="Start Time" [sortable]="true">
+                <template let-col let-data="rowData" pTemplate="body">
+                    <span>{{data.start_time | date: 'MM/dd/yyyy HH:mm'}}</span>
+                </template>
+            </p-column>
+            <p-column field="end_time" header="End Time" [sortable]="true">
+                <template let-col let-data="rowData" pTemplate="body">
+                    <span>{{data.end_time | date: 'MM/dd/yyyy HH:mm'}}</span>
+                </template>
+            </p-column>
+            <p-column field="status_name" header="Status" [sortable]="true"></p-column>
+            <p-column field="entries" header="Submissions" [sortable]="true" styleClass="col-button"></p-column>
+            <footer>
+                <div class="ui-helper-clearfix" style="width:100%">
+                    <button type="button" pButton icon="fa-plus" style="float:left" (click)="onCreate()" label="Add"></button>
+                    There are {{ dataList?.length }} competitions
+                </div>
+            </footer>
+            <template let-data>
+                <div class="ui-grid ui-grid-responsive">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-2 text-muted"><strong>Description: </strong></div>
+                                    <div class="ui-grid-col-10">{{ data.description }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-grid">
+                    <button type="button" class="btn btn-link btn-sm text-primary" (click)="onEdit(data)">
+                        <i class="fa fa-edit"></i> Edit
+                    </button>
+                    <a [routerLink]="['/c', data.slug]" target="_blank" class="btn btn-link text-primary"><i class="fa fa-search"></i> Review</a>
+                    <button type="button" class="btn btn-link btn-sm text-danger" (click)="onDelete(data)">
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+                </div>
+            </template>
+        </p-dataTable>
+    </div>
+</div>

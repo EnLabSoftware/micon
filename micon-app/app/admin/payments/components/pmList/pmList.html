@@ -1,0 +1,43 @@
+<div class="widgets">
+    <div class="row">
+        <p-dataTable [value]="dataList" [rows]="20" [paginator]="true" [pageLinks]="3" [responsive]="true" [stacked]="stacked" expandableRows="true">
+            <p-column expander="true" styleClass="col-icon"></p-column>
+            <p-column field="paymentID" header="Payment ID" [sortable]="true" [filter]="true" styleClass="col-button"></p-column>
+            <p-column field="payment_method" header="Payment Method" [filter]="true"></p-column>
+            <p-column field="buyer" header="User" [filter]="true"></p-column>
+            <p-column field="competition" header="Competition" [filter]="true" filterMatchMode="contains">
+                <template let-data="rowData" pTemplate type="body">
+                    <a [routerLink]="['/sysadmin/competitions', data.competition_slug]" target="_blank">
+                        {{ data.competition }}
+                    </a>
+                </template>
+            </p-column>
+            <p-column field="payment_status" header="Status" [filter]="true"></p-column>
+            <p-column field="uploaded" header="Created" [sortable]="true" [filter]="true">
+                <template let-data="rowData" pTemplate type="body">
+                    {{ data.created | date:'yyyy/MM/dd' }}
+                </template>
+            </p-column>
+            <footer>There are {{ dataList?.length }} payments</footer>
+            <template let-data>
+                <div class="ui-grid ui-grid-responsive">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-2 text-muted"><strong>Log: </strong></div>
+                                    <div class="ui-grid-col-10">{{ data.message_log }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-grid">
+                    <button type="button" class="btn btn-link btn-sm text-danger" (click)="onDelete(data)">
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+                </div>
+            </template>
+        </p-dataTable>
+    </div>
+</div>

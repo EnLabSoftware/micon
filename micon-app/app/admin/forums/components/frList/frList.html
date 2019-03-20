@@ -1,0 +1,32 @@
+<div class="widgets">
+    <div class="row">
+        <p-dataTable [value]="dataList" [rows]="20" [paginator]="true" [pageLinks]="3" [responsive]="true" [stacked]="stacked" expandableRows="true">
+            <p-column expander="true" styleClass="col-icon"></p-column>
+            <p-column field="title" header="Title" [filter]="true" filterMatchMode="contains"></p-column>
+            <p-column field="author_name" header="Author" [filter]="true"></p-column>
+            <p-column field="competition" header="Competition" [filter]="true" filterMatchMode="contains">
+                <template let-data="rowData" pTemplate type="body">
+                    <a [routerLink]="['/sysadmin/competitions', data.competition_slug]" class="text-primary" target="_blank">
+                        {{ data.competition }}
+                    </a>
+                </template>
+            </p-column>
+            <p-column field="created" header="Created" [sortable]="true">
+                <template let-data="rowData" pTemplate type="body">
+                    {{ data.created | date:'medium' }}
+                </template>
+            </p-column>
+            <footer>There are {{ dataList?.length }} topics</footer>
+            <template let-data>
+                <div class="ui-grid">
+                    <a [routerLink]="['/c', data.competition_slug, 'forums', 't', data.slug]" target="_blank" class="btn btn-link text-primary">
+                        <i class="fa fa-search"></i> Review
+                    </a>
+                    <button type="button" class="btn btn-link btn-sm text-danger" (click)="onDelete(data)">
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+                </div>
+            </template>
+        </p-dataTable>
+    </div>
+</div>

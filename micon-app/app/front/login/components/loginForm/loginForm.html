@@ -1,0 +1,37 @@
+<fr-login-top></fr-login-top>
+<div class="col-sm-8 col-sm-offset-2">
+    <div class="card m-x-auto m-t-3" style="max-width: 450px">
+        <div class="card-block">
+            <auth-social></auth-social>
+            <hr>
+            <div class="alert alert-danger" *ngIf="errorMessages">
+                {{ errorMessages }}
+            </div>
+            <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="form-horizontal">
+                <div class="form-group"
+                     [ngClass]="{'has-error': (!username.valid && username.touched), 'has-success': (username.valid && username.touched)}">
+                    <label for="inputUsername" class="control-label">Username:</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                        <input [formControl]="username" type="text" class="form-control" id="inputUsername"
+                               placeholder="Username">
+                    </div>
+                </div>
+                <div class="form-group"
+                     [ngClass]="{'has-error': (!password.valid && password.touched), 'has-success': (password.valid && password.touched)}">
+                    <label for="inputPassword" class="control-label">Password:</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                        <input [formControl]="password" type="password" class="form-control" id="inputPassword"
+                               placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p class="sign-up-link">New to MICON? <a [routerLink]="['/register']">Sign up!</a></p>
+                    <p>Forgot password? <a [routerLink]="['/login/reset-password']">Reset it.</a></p>
+                    <button [disabled]="!form.valid" type="submit" class="btn btn-primary btn-block border-radius-0">Sign in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

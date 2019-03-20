@@ -1,0 +1,80 @@
+#portfolio {
+  .portfolio-item {
+    margin: 0 0 15px;
+    right: 0;
+    .portfolio-link{
+      display: block;
+      position: relative;
+      max-width: 400px;
+      margin: 0 auto;
+      .caption{
+        overflow: auto;
+        background: rgba(24, 188, 156, 0.9);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: all ease 0.5s;
+        -webkit-transition: all ease 0.5s;
+        -moz-transition: all ease 0.5s;
+        &:hover{
+          opacity: 1;
+        }
+        .caption-content{
+          position: absolute;
+          width: 94%;
+          height: 20px;
+          font-size: 20px;
+          text-align: center;
+          margin-top: 7%;
+          margin-bottom: 20px;
+          margin-left: 3%;
+          margin-right: 3%;
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+#portfolio * {
+  z-index: 2;
+}
+@media (min-width: 767px) {
+  #portfolio .portfolio-item {
+    margin: 0 0 30px;
+  }
+}
+hr.star-light,
+hr.star-primary {
+  padding: 0;
+  border: none;
+  border-top: solid 5px;
+  text-align: center;
+  max-width: 250px;
+  margin: 25px auto 30px;
+}
+hr.star-light:after,
+hr.star-primary:after {
+  content: "\f005";
+  font-family: FontAwesome;
+  display: inline-block;
+  position: relative;
+  top: -0.8em;
+  font-size: 2em;
+  padding: 0 0.25em;
+}
+hr.star-light {
+  border-color: white;
+}
+hr.star-light:after {
+  background-color: #18BC9C;
+  color: white;
+}
+hr.star-primary {
+  border-color: #2C3E50;
+}
+hr.star-primary:after {
+  background-color: white;
+  color: #2C3E50;
+}

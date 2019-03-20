@@ -1,0 +1,25 @@
+<html>
+<head>
+    <script>
+        {% if is_success %}
+            alert('Thank you! Your payment was processed successfully.');
+        {% else %}
+            alert('An error has occurred. Please contact Administrator.');
+        {% endif %}
+        // add relevant message above or remove the line if not required
+        window.onload = function () {
+            if (window.opener) {
+                window.close();
+            }
+            else {
+                if (top.dg.isOpen() == true) {
+                    top.dg.closeFlow();
+                    return true;
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+</body>
+</html>

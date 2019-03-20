@@ -1,0 +1,8 @@
+<div class="picture-group">
+  <div class="picture-wrapper" (click)="bringFileSelector();">
+    <img src="{{ picture }}" *ngIf="picture">
+    <img src="{{ defaultPicture }}" *ngIf="!picture && defaultPicture">
+  </div>
+  <a href class="change-picture" (click)="bringFileSelector();">Change</a>
+  <input #fileUpload type="file" hidden="true" id="uploadFile" (change)="onFiles()">
+</div>

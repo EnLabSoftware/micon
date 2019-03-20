@@ -1,0 +1,115 @@
+<p-dataTable [value]="dataList" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true" [stacked]="stacked" expandableRows="true">
+    <p-column expander="true" styleClass="col-icon"></p-column>
+    <p-column field="name" header="Name" [sortable]="true" [filter]="true"></p-column>
+    <p-column field="type_name" header="Type" [sortable]="true" [filter]="true"></p-column>
+    <p-column field="size" header="Size" [sortable]="true"></p-column>
+    <footer>
+        <div class="ui-helper-clearfix" style="width:100%">
+            <button type="button" pButton icon="fa-plus" style="float:left" (click)="onCreate()" label="Add"></button>
+        </div>
+    </footer>
+    <template let-data>
+        <div class="ui-grid ui-grid-responsive">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 text-muted"><strong>Description: </strong></div>
+                            <div class="ui-grid-col-10">{{ data.description }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid">
+            <button type="button" class="btn btn-link btn-sm text-primary" (click)="onEdit(data)">
+                <i class="fa fa-edit"></i> Edit
+            </button>
+            <a href="{{ data.url }}" class="btn btn-link text-primary"><i class="fa fa-download"></i> Download</a>
+            <button type="button" class="btn btn-link btn-sm text-danger" (click)="onDelete(data)">
+                <i class="fa fa-trash"></i> Delete
+            </button>
+        </div>
+    </template>
+</p-dataTable>
+
+<p-dialog
+        [appendTo]="formSettings.appendTo"
+        [(header)]="formSettings.header"
+        [(modal)]="formSettings.modal"
+        [(visible)]="formSettings.visible"
+        [(draggable)]="formSettings.draggable"
+        [(resizable)]="formSettings.resizable"
+        [(responsive)]="formSettings.responsive"
+        [(width)]="formSettings.width" *ngIf="formSettings.visible">
+
+    <form *ngIf="is_create" class="form-horizontal" novalidate #f="ngForm" (ngSubmit)="formCreate(f.valid && competitionData.attachment)">
+        <div class="row" [class.has-error]="!competitionData.attachment && f.submitted">
+            <label for="inputFile" class="form-control-label">File</label>
+            <div class="col-sm-12">
+                <ba-file-input #file="ngModel" required [(ngModel)]="competitionData.attachment" [ngModelOptions]="{standalone: true}"></ba-file-input>
+                <small [hidden]="competitionData.attachment || (!competitionData.attachment && !f.submitted)" class="text-danger">
+                    File is required
+                </small>
+            </div>
+        </div>
+        <div class="row" [class.has-error]="!type.valid && f.submitted">
+            <label for="inputType" class="form-control-label">Type</label>
+            <div class="col-sm-12">
+                <select #type="ngModel" required [(ngModel)]="competitionData.type" name="type" class="form-control">
+                    <option *ngFor="let type of typesList" value="{{ type.value }}">{{ type.label }}</option>
+                </select>
+                <small [hidden]="type.valid || (type.pristine && !f.submitted)" class="text-danger">
+                    Type is required
+                </small>
+            </div>
+        </div>
+        <div class="row">
+            <label for="inputDescription" class="form-control-label">Description</label>
+            <div class="col-sm-12">
+                <textarea rows="3" style="width: 100%" [(ngModel)]="competitionData.description" name="description" class="form-control"></textarea>
+            </div>
+        </div>
+
+        <footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                <button type="button" pButton icon="fa-close" (click)="hideDialog()" label="Cancel"></button>
+                <button type="submit" pButton icon="fa-check" label="Add"></button>
+            </div>
+        </footer>
+    </form>
+
+    <form *ngIf="is_edit" class="form-horizontal" novalidate #f="ngForm" (ngSubmit)="formEdit(f.valid)">
+        <div class="row">
+            <label for="inputID" class="form-control-label">Name: <strong>{{ editRow.name }}</strong></label>
+        </div>
+        <div class="row" [class.has-error]="!description.valid && f.submitted">
+            <label for="inputDescription" class="form-control-label">Description: </label>
+            <div class="col-sm-12">
+                <textarea rows="6" required #description="ngModel" [(ngModel)]="editRow.description"
+                          name="description" class="form-control" style="width: 100%"></textarea>
+                <small [hidden]="description.valid || (description.pristine && !f.submitted)" class="text-danger">
+                    Description is required
+                </small>
+            </div>
+        </div>
+        <div class="row" [class.has-error]="!type.valid && f.submitted">
+            <label for="inputType" class="form-control-label">Type: </label>
+            <div class="col-sm-12">
+                <select #type="ngModel" required [(ngModel)]="editRow.type" name="type" class="form-control">
+                    <option *ngFor="let type of typesList" value="{{ type.value }}" [selected]="type.value == editRow.type">{{ type.label }}</option>
+                </select>
+                <small [hidden]="type.valid || (type.pristine && !f.submitted)" class="text-danger">
+                    Type is required
+                </small>
+            </div>
+        </div>
+        <footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                <button type="button" pButton icon="fa-close" (click)="hideDialog()" label="Cancel"></button>
+                <button type="submit" pButton icon="fa-check" label="Edit"></button>
+            </div>
+        </footer>
+    </form>
+</p-dialog>
+

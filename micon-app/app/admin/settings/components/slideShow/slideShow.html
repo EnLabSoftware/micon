@@ -1,0 +1,73 @@
+<ba-card title="Slideshow" baCardClass="with-scroll">
+<div class="slide-list">
+    <div class="row">
+        <p-dataTable [value]="dataList" [rows]="3" [paginator]="true" [pageLinks]="3" [responsive]="true" [stacked]="stacked" expandableRows="true">
+            <p-column expander="true" styleClass="col-icon"></p-column>
+            <p-column field="caption" header="Caption"></p-column>
+            <p-column field="imag
+                menu: {
+                  title: 'Site settings',
+                }
+              }e" header="Image">
+                <template let-data="rowData" pTemplate type="body">
+                    <img src="{{ data.image }}" style="width: auto; height: 150px">
+                </template>
+            </p-column>
+            <footer>
+                <div class="ui-helper-clearfix" style="width:100%">
+                    <button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialog()" label="Add"></button>
+                    There are {{ dataList?.length }} slides
+                </div>
+            </footer>
+            <template let-data>
+                <div class="ui-grid">
+                    <button type="button" class="btn btn-link btn-sm text-primary" (click)="onEdit(data)">
+                        <i class="fa fa-edit"></i> Edit
+                    </button>
+                    <button type="button" class="btn btn-link btn-sm text-danger" (click)="onDelete(data)">
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+                </div>
+            </template>
+        </p-dataTable>
+    </div>
+</div>
+</ba-card>
+<p-dialog header="Add new slide" [(visible)]="display" modal="true" width="400">
+<div class="widgets">
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-horizontal" novalidate #f="ngForm" (ngSubmit)="formSubmit(f.valid && slide_setting.image)">
+                <div class="form-group row" [class.has-error]="!caption.valid && f.submitted">
+                    <label for="inputCaption" class="col-sm-2 form-control-label">Caption</label>
+                    <div class="col-sm-6">
+                        <input type="text" required minlength="5" [(ngModel)]="slide_setting.caption" #caption="ngModel" name="caption"
+                               class="form-control" id="inputCaption" placeholder="Caption">
+                        <small [hidden]="caption.valid || (caption.pristine && !f.submitted)" class="text-danger">
+                            Caption is required
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group row" [class.has-error]="!slide_setting.image && f.submitted">
+                    <label for="inputImage" class="col-sm-2 form-control-label">Image</label>
+                    <div class="col-sm-6">
+                        <ba-image-input required #image="ngModel"
+                                        [picture]="slide_setting.image" [defaultPicture]="defaultImage"
+                                        [(ngModel)]="slide_setting.image"
+                                        [ngModelOptions]="{standalone: true}"></ba-image-input>
+                        <small [hidden]="slide_setting.image || (!slide_setting.image && !f.submitted)" class="text-danger">
+                            Image is required
+                        </small>
+                    </div>
+                </div>
+                <input type="hidden" [(ngModel)]="slide_setting.c_id" #c_id="ngModel" name="c_id">
+                <div class="form-group row">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary border-radius-0">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</p-dialog>
