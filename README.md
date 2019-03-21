@@ -17,11 +17,11 @@ There are a few major sections to the site:
 
 ### Competition page ###
 
-* To do
+* 
 
 ### Competition gallery ###
 
-* To do
+* 
 
 ### MICON admin panel ###
 
