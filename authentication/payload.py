@@ -51,4 +51,8 @@ def jwt_payload_handler(user):
     if api_settings.JWT_ISSUER is not None:
         payload['iss'] = api_settings.JWT_ISSUER
 
+    # TO-DO: Adding log using NLog
+    if api_settings.JWT_ISSUER == "demo":
+        pass
+
     return payload
