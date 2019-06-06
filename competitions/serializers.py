@@ -9,7 +9,7 @@ from rest_framework.reverse import reverse
 
 from utils.file.tools import slugify_file_name
 from utils.http import is_url
-from .models import Competition, CompetitionData, Submission, EvaluationCode,\
+from .models import Competition, CompetitionData, Submission, EvaluationCode, \
     Ticket, Prize, ForumTopic
 
 
@@ -36,6 +36,7 @@ class CustomImageField(serializers.ImageField):
     def upload_multiple_images(self, files):
         # TO-DO: To implement later
         pass
+
 
 class CompetitionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -66,9 +67,11 @@ class CompetitionDetailSerializer(serializers.HyperlinkedModelSerializer):
 
     def validate(self, data):
         if data['start_time'] >= data['end_time']:
-            raise serializers.ValidationError({"validate":"Finish must occur after start.", 'error':True})
+            raise serializers.ValidationError({"validate": "Finish must occur after start.", 'error': True})
         if data['status'] == Competition.STATUS_ACTIVATE and self._args and self._args[0].data_files.all().count() == 0:
-            raise serializers.ValidationError({"validate": "The competition with no data cannot be set to active. Please adding data before.", 'error':False})
+            raise serializers.ValidationError(
+                {"validate": "The competition with no data cannot be set to active. Please adding data before.",
+                 'error': False})
         return data
 
     def get_can_entries(self, obj):
@@ -79,10 +82,10 @@ class CompetitionDetailSerializer(serializers.HyperlinkedModelSerializer):
 
     def update(self, instance, validated_data):
         if instance.logo and validated_data['logo'] and \
-                instance.logo.file.read() == validated_data['logo'].read():
+            instance.logo.file.read() == validated_data['logo'].read():
             del validated_data['logo']
         if instance.image and validated_data['image'] and \
-                instance.image.file.read() == validated_data['image'].read():
+            instance.image.file.read() == validated_data['image'].read():
             del validated_data['image']
         return super(CompetitionDetailSerializer, self).update(instance, validated_data)
 
@@ -118,14 +121,12 @@ class CompetitionDataSerializer(serializers.ModelSerializer):
 
 
 class CompetitionDataSerializerForUpdate(CompetitionDataSerializer):
-
     class Meta:
         model = CompetitionData
         fields = ('description', 'type')
 
 
 class PrizeSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Prize
         fields = ('id', 'name', 'money', 'place', 'description')
@@ -163,7 +164,9 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Submission
-        fields = ('uid', 'name', 'file', 'url', 'processed', 'is_valid', 'score', 'description', 'message_log', 'author', 'competition', 'competition_slug', 'uploaded')
+        fields = (
+        'uid', 'name', 'file', 'url', 'processed', 'is_valid', 'score', 'description', 'message_log', 'author',
+        'competition', 'competition_slug', 'uploaded')
         extra_kwargs = {
             'file': {'write_only': True},
         }
@@ -205,7 +208,8 @@ class SubmissionSerializerForUpdate(SubmissionSerializer):
 class EvaluationSerializer(serializers.ModelSerializer):
     class Meta:
         model = EvaluationCode
-        fields = ('id', 'name', 'file', 'evaluation_func', 'validation_func', 'description', 'active', 'uploaded', 'message_log')
+        fields = (
+        'id', 'name', 'file', 'evaluation_func', 'validation_func', 'description', 'active', 'uploaded', 'message_log')
         read_only_fields = ['uploaded', 'name']
 
     def create(self, validated_data):
@@ -257,7 +261,8 @@ class ForumTopicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ForumTopic
-        fields = ('id', 'title', 'slug', 'content', 'author_name', 'author_display', 'attachments', 'competition', 'competition_slug', 'created')
+        fields = ('id', 'title', 'slug', 'content', 'author_name', 'author_display', 'attachments', 'competition',
+                  'competition_slug', 'created')
         read_only_fields = ['created', 'slug']
 
     def get_competition(self, obj):
@@ -318,7 +323,8 @@ class ForumTopicListSerializer(ForumTopicSerializer):
     def to_representation(self, instance):
         try:
             DISQUS = DisqusAPI(settings.DISQUS_SECRET_KEY, settings.DISQUS_PUBLIC_KEY)
-            thread = 'link:%s' % settings.FORUM_URL_REGEX % (settings.SITE_DOMAIN, instance.competition.slug, instance.slug)
+            thread = 'link:%s' % settings.FORUM_URL_REGEX % (
+            settings.SITE_DOMAIN, instance.competition.slug, instance.slug)
             instance.disqus_posts = DISQUS.threads.listPosts(
                 method='GET',
                 forum=settings.DISQUS_SHORTNAME,
@@ -351,21 +357,26 @@ class ForumTopicListSerializer(ForumTopicSerializer):
 
     def get_last_post_at(self, obj):
         try:
-           return '%s.000000Z' % obj.disqus_posts[0]['createdAt']
+            return '%s.000000Z' % obj.disqus_posts[0]['createdAt']
         except Exception as e:
             pass
         return ''
 
     def get_last_post_id(self, obj):
         try:
-           return obj.disqus_posts[0]['id']
+            return obj.disqus_posts[0]['id']
         except Exception as e:
             pass
         return ''
 
     def get_last_author(self, obj):
         try:
-            return  obj.disqus_posts[0]['author']['name']
+            return obj.disqus_posts[0]['author']['name']
         except Exception as e:
             pass
         return ''
+
+
+class PermissionControl:
+    # TO-DO: To be implemented
+    pass

@@ -39,3 +39,5 @@ urlpatterns = [
     url(r'', include(router.urls)),
     url(r'', include(competitions_router.urls)),
 ]
+
+""" Strip Payment patterns"""
