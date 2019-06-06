@@ -41,3 +41,4 @@ urlpatterns = [
 ]
 
 """ Strip Payment patterns"""
+""" Failed resolving issues due to wrong keyword """
