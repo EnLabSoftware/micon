@@ -33,6 +33,9 @@ class CustomImageField(serializers.ImageField):
 
         return super(CustomImageField, self).to_internal_value(data)
 
+    def upload_multiple_images(self, files):
+        # TO-DO: To implement later
+        pass
 
 class CompetitionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
