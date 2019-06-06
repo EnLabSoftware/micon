@@ -40,3 +40,5 @@ urlpatterns = [
     url(r'', include(competitions_router.urls)),
 ]
 """ For demo purpose """
+
+""" Fix defect #1 """
