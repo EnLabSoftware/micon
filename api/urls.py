@@ -39,3 +39,4 @@ urlpatterns = [
     url(r'', include(router.urls)),
     url(r'', include(competitions_router.urls)),
 ]
+""" For demo purpose """
