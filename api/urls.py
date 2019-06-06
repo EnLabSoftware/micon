@@ -21,6 +21,7 @@ competitions_router.register(r'submissions', comp_views.SubmissionViewSet, base_
 competitions_router.register(r'evaluations', comp_views.EvaluationViewSet, base_name='competition-evaluation')
 competitions_router.register(r'leaderboard', comp_views.CompetitionLeaderboardViewSet, base_name='competition-leaderboard')
 
+""" URL patterns"""
 urlpatterns = [
     url(r'', include('core.urls')),
     url(r'^auth/', include('rest_auth.urls')),
